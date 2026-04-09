@@ -2,11 +2,17 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>NCT Playlist UI</title>
+    <title>NCT Playlist UI with iTunes API</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+
     <style>
         :root {
-            --nct-neon: #CBFF00; /* NCT 공식 네온 그린 유사색 */
-            --bg-yellow: #E2FF42; /* 레퍼런스 배경의 노란빛 도는 그린 */
+            --nct-neon: #CBFF00; /* NCT 공식 네온 그린 */
+            --bg-yellow: #E2FF42; /* 레퍼런스 배경 노란빛 그린 */
+            --font-hand: 'Nanum Pen Script', cursive; /* 레퍼런스 손글씨 */
+            --font-gothic: 'Pretendard', sans-serif; /* 레퍼런스 기본 텍스트 */
         }
 
         body {
@@ -16,7 +22,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            font-family: 'Pretendard', sans-serif;
+            font-family: var(--font-gothic);
         }
 
         .playlist-card {
@@ -25,6 +31,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
         }
 
         /* 상단 프로필 영역 */
@@ -58,18 +65,19 @@
             background: #fff;
             padding: 2px 8px;
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
+            font-size: 11px;
+            font-weight: 900;
             border: 1px solid #000;
         }
 
         .user-name-box {
             background: #fff;
-            padding: 8px;
-            border: 1px solid #000;
-            font-size: 18px;
-            font-weight: bold;
+            padding: 10px;
+            border: 2px solid #000;
+            font-size: 20px;
+            font-weight: 900;
             text-align: center;
+            font-family: var(--font-gothic);
         }
 
         /* 3x3 그리드 영역 */
@@ -88,15 +96,16 @@
 
         .hashtag {
             font-size: 11px;
-            font-weight: bold;
+            font-weight: 900;
             margin-bottom: 4px;
+            font-family: var(--font-gothic);
         }
 
         .album-cover {
             width: 100%;
             aspect-ratio: 1 / 1;
             background-color: #ddd;
-            border: 1px solid #000;
+            border: 2px solid #000;
             cursor: pointer;
             transition: transform 0.2s;
             object-fit: cover;
@@ -106,16 +115,16 @@
             transform: scale(1.05);
         }
 
-        .song-title {
-            width: 100%;
+        .song-title-box {
+            width: calc(100% - 2px);
             background: #fff;
-            border: 1px solid #000;
+            border: 2px solid #000;
             margin-top: 5px;
-            padding: 4px 0;
-            font-size: 10px;
+            padding: 2px 0;
+            font-size: 18px;
             text-align: center;
+            font-family: var(--font-hand); /* 손글씨 폰트 적용 */
             font-weight: bold;
-            /* 손글씨 느낌을 원하시면 나중에 웹폰트를 적용하세요 */
         }
 
         /* 하단 최애곡 영역 */
@@ -126,7 +135,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            border: 1px solid #000;
+            border: 2px solid #000;
         }
 
         .fav-cover {
@@ -140,8 +149,8 @@
         }
 
         .fav-title {
-            font-size: 14px;
-            font-weight: bold;
+            font-size: 20px;
+            font-family: var(--font-hand); /* 손글씨 폰트 적용 */
             display: block;
         }
 
@@ -156,6 +165,60 @@
             width: 60%;
             height: 100%;
             background: #000;
+        }
+
+        /* 검색 모달 스타일 */
+        .search-modal {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 20px;
+            border: 3px solid #000;
+            width: 80%;
+            z-index: 100;
+        }
+
+        .search-input {
+            width: 80%;
+            padding: 8px;
+            border: 2px solid #000;
+            font-family: var(--font-gothic);
+        }
+
+        .search-btn {
+            padding: 8px 15px;
+            background: var(--nct-neon);
+            border: 2px solid #000;
+            font-family: var(--font-gothic);
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .search-results {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 5px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-item:hover {
+            background: #f5f5f5;
+        }
+
+        .result-cover {
+            width: 40px;
+            height: 40px;
         }
     </style>
 </head>
@@ -176,12 +239,12 @@
     <div class="grid-container">
         <script>
             const hashtags = ['#청량', '#설렘', '#벅참', '#신남', '#네오', '#슬픔', '#중독성', '#강렬', '#퍼포먼스'];
-            hashtags.forEach(tag => {
+            hashtags.forEach((tag, index) => {
                 document.write(`
-                    <div class="track-item">
+                    <div class="track-item" id="item-${index}">
                         <div class="hashtag">${tag}</div>
-                        <div class="album-cover" onclick="alert('검색창 열기')"></div>
-                        <div class="song-title">곡 제목 입력</div>
+                        <img class="album-cover" onclick="openSearch(${index})" src="https://via.placeholder.com/150" alt="Select Song">
+                        <div class="song-title-box">곡 제목 입력</div>
                     </div>
                 `);
             });
@@ -196,7 +259,79 @@
         </div>
         <span style="font-size: 8px; color: #888;">My Favorite...</span>
     </div>
+
+    <div class="search-modal" id="searchModal">
+        <input type="text" class="search-input" id="searchInput" placeholder="NCT 곡 제목을 입력하세요">
+        <button class="search-btn" onclick="searchSong()">검색</button>
+        <div class="search-results" id="searchResults"></div>
+        <button style="margin-top:10px; padding: 5px; border:1px solid #000; cursor:pointer;" onclick="closeSearch()">닫기</button>
+    </div>
 </div>
+
+<script>
+    let currentItemIndex = null; // 현재 선택된 그리드 칸 번호
+
+    // 검색 모달 열기
+    function openSearch(index) {
+        currentItemIndex = index;
+        document.getElementById('searchModal').style.display = 'block';
+        document.getElementById('searchInput').focus();
+    }
+
+    // 검색 모달 닫기
+    function closeSearch() {
+        document.getElementById('searchModal').style.display = 'none';
+        document.getElementById('searchResults').innerHTML = '';
+        document.getElementById('searchInput').value = '';
+    }
+
+    // iTunes API를 이용한 곡 검색
+    async function searchSong() {
+        const query = document.getElementById('searchInput').value;
+        if (!query) return;
+
+        const resultsDiv = document.getElementById('searchResults');
+        resultsDiv.innerHTML = '검색 중...';
+
+        try {
+            // NCT로 검색 결과 제한하여 정확도 높이기
+            const response = await fetch(`https://itunes.apple.com/search?term=NCT+${query}&entity=song&limit=10`);
+            const data = await response.json();
+
+            resultsDiv.innerHTML = ''; // 결과 초기화
+
+            data.results.forEach(song => {
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                // 고화질 앨범 아트를 위한 URL 수정
+                const highResCover = song.artworkUrl100.replace('100x100bb', '600x600bb');
+
+                item.innerHTML = `
+                    <img src="${song.artworkUrl60}" class="result-cover">
+                    <div>
+                        <strong>${song.trackName}</strong><br>
+                        <span style="font-size:12px; color:#666;">${song.artistName}</span>
+                    </div>
+                `;
+                // 곡 선택 시 그리드에 반영
+                item.onclick = () => selectSong(highResCover, song.trackName);
+                resultsDiv.appendChild(item);
+            });
+
+        } catch (error) {
+            resultsDiv.innerHTML = '검색 실패 ㅠㅠ';
+            console.error(error);
+        }
+    }
+
+    // 선택한 곡을 그리드 칸에 채우기
+    function selectSong(coverUrl, title) {
+        const item = document.getElementById(`item-${currentItemIndex}`);
+        item.querySelector('.album-cover').src = coverUrl; // 이미지 변경
+        item.querySelector('.song-title-box').innerText = title; // 제목 변경
+        closeSearch(); // 모달 닫기
+    }
+</script>
 
 </body>
 </html>
