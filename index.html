@@ -44,15 +44,15 @@
         .header {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 25px;
         }
 
         .profile-container {
             position: relative;
             cursor: pointer;
-            width: 80px;
-            height: 80px;
+            width: 75px;
+            height: 75px;
             border-radius: 50%;
             border: 3px solid #000;
             background-color: var(--nct-gray);
@@ -68,68 +68,82 @@
         .profile-placeholder { position: absolute; font-size: 14px; color: #fff; font-weight: 900; z-index: 1; }
         #profileInput { display: none; }
 
-        .user-name-box {
-            background: #fff;
-            padding: 0 20px;
-            border: 3px solid #000;
+        .title-area { flex-grow: 1; display: flex; flex-direction: column; gap: 4px; }
+
+        .badge-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 50px;
+        }
+
+        .nct-badge {
+            background: #fff;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 900;
+            border: 2.5px solid #000;
+        }
+
+        /* 이름 박스: 레퍼런스처럼 너비 확장 */
+        .user-name-box {
+            background: #fff;
+            padding: 0 12px;
+            border: 3px solid #000;
+            display: flex;
+            align-items: center;
+            height: 45px;
             box-sizing: border-box;
             width: 100%;
         }
 
-        .editable-name { outline: none; font-weight: 900; white-space: nowrap; font-size: 20px; flex-grow: 1; text-align: left; overflow: hidden; }
-        .fixed-text { white-space: pre; font-size: 12px; color: #000; font-weight: 900; flex-shrink: 0; margin-left: 5px; }
+        .editable-name { outline: none; font-weight: 900; white-space: nowrap; font-size: 18px; flex-grow: 1; text-align: left; overflow: hidden; }
+        .fixed-text { white-space: pre; font-size: 11px; color: #000; font-weight: 900; flex-shrink: 0; margin-left: 4px; }
 
         .grid-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 25px;
-            align-items: start;
         }
 
-        .track-item { display: flex; flex-direction: column; align-items: center; width: 100%; overflow: hidden; }
-        .hashtag { font-size: 11px; font-weight: 900; margin-bottom: 5px; height: 14px; }
+        .track-item { display: flex; flex-direction: column; align-items: center; width: 100%; }
+        .hashtag { font-size: 10px; font-weight: 900; margin-bottom: 4px; }
 
         .album-cover-container {
             width: 100%; aspect-ratio: 1 / 1;
             background-color: var(--nct-gray);
             border: none; cursor: pointer;
             display: flex; justify-content: center; align-items: center;
-            position: relative; overflow: hidden; box-sizing: border-box;
+            position: relative; overflow: hidden;
         }
 
         .album-cover { width: 100%; height: 100%; object-fit: cover; opacity: 0; z-index: 2; }
         .album-cover.uploaded { opacity: 1; }
-        .cover-placeholder { position: absolute; font-size: 14px; color: #fff; font-weight: 900; z-index: 1; }
+        .cover-placeholder { position: absolute; font-size: 12px; color: #fff; font-weight: 900; z-index: 1; }
 
         .song-title-box {
             width: 100%; background: #fff; border: none;
-            border-radius: 8px; /* 모서리 곡률 조정: 더 네모나게 */
-            margin-top: 6px; height: 32px;
+            border-radius: 6px; margin-top: 5px; height: 28px;
             display: flex; justify-content: center; align-items: center;
-            padding: 0 10px; box-sizing: border-box; overflow: hidden;
+            padding: 0 6px; box-sizing: border-box; overflow: hidden;
         }
 
-        /* 폰트는 직접 입력 불가로 설정(pointer-events) */
         .song-title-text {
-            font-family: var(--font-hand); font-weight: bold; font-size: 16px;
-            white-space: nowrap; outline: none; max-width: 100%; pointer-events: none;
+            font-family: var(--font-hand); font-weight: bold; font-size: 15px;
+            white-space: nowrap; outline: none; pointer-events: none;
         }
 
-        /* 하단 Favorite 영역 */
+        /* 하단 Favorite 영역: 레이아웃 재조정 */
         .favorite-bar {
-            background: #fff; border-radius: 20px; padding: 15px 20px;
+            background: #fff; border-radius: 20px; padding: 15px;
             display: flex; align-items: center; gap: 15px; border: 3px solid #000;
-            box-sizing: border-box; min-height: 120px;
+            box-sizing: border-box;
         }
 
-        /* 최애곡 이미지 크기: 80px로 조정 */
+        /* 최애곡 이미지: 60px로 축소 */
         .fav-cover-container {
-            width: 80px; height: 80px; border-radius: 8px; border: 2px solid #000;
+            width: 60px; height: 60px; border-radius: 6px; border: 2px solid #000;
             background-color: var(--nct-gray); cursor: pointer;
             display: flex; justify-content: center; align-items: center;
             position: relative; overflow: hidden; flex-shrink: 0;
@@ -137,36 +151,36 @@
 
         .fav-cover { width: 100%; height: 100%; object-fit: cover; opacity: 0; z-index: 2; }
         .fav-cover.uploaded { opacity: 1; }
-        .fav-placeholder { position: absolute; font-size: 14px; color: #fff; font-weight: 900; z-index: 1; }
+        .fav-placeholder { position: absolute; font-size: 12px; color: #fff; font-weight: 900; z-index: 1; }
 
         .fav-info { flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
 
-        /* 최애곡 제목 폰트 키우기 */
+        /* 최애곡 제목: 글자 크기 더더 키우기 */
         .fav-title {
-            font-size: 42px; /* 더 키움 */
-            font-family: var(--font-hand); display: block; outline: none;
-            white-space: nowrap; overflow: hidden; margin-bottom: 5px;
-            pointer-events: none; /* 직접 수정 방지 */
+            font-size: 48px; /* 극대화 */
+            font-family: var(--font-hand); display: block;
+            white-space: nowrap; overflow: hidden; margin-bottom: -5px; line-height: 1.1;
+            pointer-events: none;
         }
 
-        .progress-line-container { display: flex; justify-content: space-between; align-items: center; }
-        .progress-line { height: 6px; background: #eee; flex-grow: 1; margin-right: 15px; }
-        .progress-fill { width: 70%; height: 100%; background: #000; }
-        .my-favorite-text { font-size: 12px; color: #888; outline:none; flex-shrink: 0; }
+        .progress-line-container { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        /* 재생바 길이 늘리기 */
+        .progress-line { height: 5px; background: #eee; flex-grow: 1; margin-right: 12px; }
+        .progress-fill { width: 75%; height: 100%; background: #000; }
+        .my-favorite-text { font-size: 11px; color: #888; flex-shrink: 0; }
 
         .submit-btn {
             background-color: var(--nct-neon); border: 3px solid #000;
-            padding: 15px 40px; font-size: 18px; font-weight: 900;
-            cursor: pointer; box-shadow: 5px 5px 0px #000; margin-top: 25px;
+            padding: 12px 35px; font-size: 17px; font-weight: 900;
+            cursor: pointer; box-shadow: 4px 4px 0px #000; margin-top: 25px;
         }
 
-        /* 검색 모달 */
         .search-modal, .result-screen {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             background: #fff; padding: 25px; border: 4px solid #000; width: 85%; max-width: 400px; z-index: 1000;
             box-shadow: 0 0 0 100vmax rgba(0,0,0,0.7);
         }
-        .search-row { display: flex; gap: 10px; margin-bottom: 15px; }
+        .search-row { display: flex; gap: 8px; margin-bottom: 12px; }
         .search-input { flex-grow: 1; padding: 10px; border: 2px solid #000; outline: none; }
         .search-btn { padding: 10px 15px; background: var(--nct-neon); border: 2px solid #000; font-weight: bold; cursor: pointer; }
         .search-results { max-height: 250px; overflow-y: auto; }
@@ -185,7 +199,7 @@
         <div class="title-area">
             <div class="badge-row">
                 <span class="nct-badge">취향의 NCT</span>
-                <span style="font-size: 9px; font-weight: 900;">NCT 10TH ANNIVERSARY</span>
+                <span style="font-size: 8px; font-weight: 900;">10TH ANNIVERSARY</span>
             </div>
             <div class="user-name-box">
                 <span id="userName" class="editable-name" contenteditable="true" spellcheck="false" oninput="adjustNameFontSize()">시즈니</span>
@@ -205,7 +219,7 @@
             <span id="favTitle" class="fav-title"></span>
             <div class="progress-line-container">
                 <div class="progress-line"><div class="progress-fill"></div></div>
-                <span contenteditable="true" class="my-favorite-text">My Favorite...</span>
+                <span class="my-favorite-text">My Favorite...</span>
             </div>
         </div>
     </div>
@@ -224,17 +238,16 @@
 
 <div class="result-screen" id="resultScreen">
     <h2 style="margin-bottom:10px;">시즈니 싱크로율</h2>
-    <div style="width: 120px; height: 120px; border: 5px solid var(--nct-neon); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 32px; font-weight: 900; margin: 20px auto; background: #000; color: #fff;"><span id="syncScore">0</span>%</div>
+    <div style="width: 100px; height: 100px; border: 4px solid var(--nct-neon); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 28px; font-weight: 900; margin: 15px auto; background: #000; color: #fff;"><span id="syncScore">0</span>%</div>
     <p id="rankMessage" style="font-family: var(--font-hand); font-size: 22px; margin-bottom: 20px;"></p>
     <button style="padding:10px 20px; cursor:pointer; background:#000; color:#fff; border:none;" onclick="closeResult()">닫기</button>
 </div>
 
 <script>
-    const nctSongs = ["무한적아", "Cherry Bomb", "질주", "Fact Check", "Hello Future", "Hot Sauce", "Candy", "Baggy Jeans", "Sticker", "영웅", "Ay-Yo", "ISTJ", "Smoothie", "Phantom", "Favorite", "We Go Up", "Chewing Gum", "BOOM", "Walk", "삐그덕"];
+    const nctSongs = ["무한적아", "Cherry Bomb", "질주", "Fact Check", "Hello Future", "Hot Sauce", "Candy", "Baggy Jeans", "Sticker", "영웅", "Ay-Yo", "ISTJ", "Smoothie", "Phantom", "Favorite", "We Go Up", "Walk", "삐그덕", "비트박스", "고래"];
     const hashtags = ['#청량', '#설렘', '#벅참', '#신남', '#네오', '#슬픔', '#중독성', '#강렬', '#퍼포먼스'];
     
     const grid = document.getElementById('mainGrid');
-
     hashtags.forEach((tag, index) => {
         grid.innerHTML += `
             <div class="track-item" id="item-${index}">
@@ -262,7 +275,7 @@
 
     function adjustNameFontSize() {
         const el = document.getElementById('userName');
-        let size = 20;
+        let size = 18;
         el.style.fontSize = size + 'px';
         while (el.scrollWidth > el.offsetWidth && size > 10) {
             size--; el.style.fontSize = size + 'px';
@@ -271,19 +284,19 @@
 
     function adjustSongFontSize(el) {
         if(!el) return;
-        let size = 16;
+        let size = 15;
         el.style.fontSize = size + 'px';
         const parent = el.parentElement;
-        while (el.scrollWidth > parent.offsetWidth - 10 && size > 7) {
+        while (el.scrollWidth > parent.offsetWidth - 8 && size > 7) {
             size--; el.style.fontSize = size + 'px';
         }
     }
 
     function adjustFavFontSize(el) {
-        let size = 42;
+        let size = 48;
         el.style.fontSize = size + 'px';
         const parent = el.parentElement;
-        while (el.scrollWidth > parent.offsetWidth - 5 && size > 18) {
+        while (el.scrollWidth > parent.offsetWidth && size > 20) {
             size--; el.style.fontSize = size + 'px';
         }
     }
@@ -317,12 +330,11 @@
             const response = await fetch(`https://itunes.apple.com/search?term=NCT+${encodeURIComponent(query)}&entity=song&limit=15`);
             const data = await response.json();
             resDiv.innerHTML = '';
-            if (data.results.length === 0) { resDiv.innerHTML = '결과가 없습니다.'; return; }
             data.results.forEach(song => {
                 const item = document.createElement('div');
                 item.className = 'result-item';
                 const highRes = song.artworkUrl100.replace('100x100bb', '600x600bb');
-                item.innerHTML = `<img src="${song.artworkUrl60}" style="width:40px; border-radius:4px;"><div><strong>${song.trackName}</strong><br><small>${song.collectionName}</small></div>`;
+                item.innerHTML = `<img src="${song.artworkUrl60}" style="width:40px; border-radius:4px;"><div><strong>${song.trackName}</strong></div>`;
                 item.onclick = () => selectSong(highRes, song.trackName);
                 resDiv.appendChild(item);
             });
@@ -354,9 +366,8 @@
         const score = Math.floor(Math.random() * 41) + 60;
         document.getElementById('syncScore').innerText = score;
         document.getElementById('resultScreen').style.display = 'block';
-        document.getElementById('rankMessage').innerText = score > 85 ? "완벽한 소울메이트! 💚" : "네오한 취향이 가득하시군요!";
+        document.getElementById('rankMessage').innerText = score > 85 ? "완벽한 소울메이트! 💚" : "네오한 취향 가득!";
     }
-
     function closeResult() { document.getElementById('resultScreen').style.display = 'none'; }
 </script>
 
