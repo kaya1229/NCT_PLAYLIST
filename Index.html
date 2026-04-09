@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>NCT Playlist UI</title>
+    <style>
+        :root {
+            --nct-neon: #CBFF00; /* NCT 공식 네온 그린 유사색 */
+            --bg-yellow: #E2FF42; /* 레퍼런스 배경의 노란빛 도는 그린 */
+        }
+
+        body {
+            background-color: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Pretendard', sans-serif;
+        }
+
+        .playlist-card {
+            background-color: var(--bg-yellow);
+            width: 360px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* 상단 프로필 영역 */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #000;
+            object-fit: cover;
+        }
+
+        .title-area {
+            flex-grow: 1;
+        }
+
+        .badge-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .nct-badge {
+            background: #fff;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid #000;
+        }
+
+        .user-name-box {
+            background: #fff;
+            padding: 8px;
+            border: 1px solid #000;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* 3x3 그리드 영역 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .track-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hashtag {
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .album-cover {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background-color: #ddd;
+            border: 1px solid #000;
+            cursor: pointer;
+            transition: transform 0.2s;
+            object-fit: cover;
+        }
+
+        .album-cover:hover {
+            transform: scale(1.05);
+        }
+
+        .song-title {
+            width: 100%;
+            background: #fff;
+            border: 1px solid #000;
+            margin-top: 5px;
+            padding: 4px 0;
+            font-size: 10px;
+            text-align: center;
+            font-weight: bold;
+            /* 손글씨 느낌을 원하시면 나중에 웹폰트를 적용하세요 */
+        }
+
+        /* 하단 최애곡 영역 */
+        .favorite-bar {
+            background: #fff;
+            border-radius: 15px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #000;
+        }
+
+        .fav-cover {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+        }
+
+        .fav-info {
+            flex-grow: 1;
+        }
+
+        .fav-title {
+            font-size: 14px;
+            font-weight: bold;
+            display: block;
+        }
+
+        .progress-line {
+            height: 3px;
+            background: #eee;
+            margin-top: 5px;
+            position: relative;
+        }
+
+        .progress-fill {
+            width: 60%;
+            height: 100%;
+            background: #000;
+        }
+    </style>
+</head>
+<body>
+
+<div class="playlist-card">
+    <div class="header">
+        <img src="https://via.placeholder.com/80" class="profile-img" alt="Profile">
+        <div class="title-area">
+            <div class="badge-row">
+                <span class="nct-badge">취향의 NCT</span>
+                <span style="font-size: 10px; font-weight: 900;">NCT 10TH ANNIVERSARY</span>
+            </div>
+            <div class="user-name-box">쟈니컬 's Playlist</div>
+        </div>
+    </div>
+
+    <div class="grid-container">
+        <script>
+            const hashtags = ['#청량', '#설렘', '#벅참', '#신남', '#네오', '#슬픔', '#중독성', '#강렬', '#퍼포먼스'];
+            hashtags.forEach(tag => {
+                document.write(`
+                    <div class="track-item">
+                        <div class="hashtag">${tag}</div>
+                        <div class="album-cover" onclick="alert('검색창 열기')"></div>
+                        <div class="song-title">곡 제목 입력</div>
+                    </div>
+                `);
+            });
+        </script>
+    </div>
+
+    <div class="favorite-bar">
+        <img src="https://via.placeholder.com/40" class="fav-cover">
+        <div class="fav-info">
+            <span class="fav-title">질주 (2 Baddies)</span>
+            <div class="progress-line"><div class="progress-fill"></div></div>
+        </div>
+        <span style="font-size: 8px; color: #888;">My Favorite...</span>
+    </div>
+</div>
+
+</body>
+</html>
