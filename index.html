@@ -68,27 +68,46 @@
         .profile-placeholder { position: absolute; font-size: 14px; color: #fff; font-weight: 900; z-index: 1; }
         #profileInput { display: none; }
 
+        .title-area { flex-grow: 1; overflow: hidden; }
+
+        .badge-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .nct-badge {
+            background: #fff;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 900;
+            border: 2px solid #000;
+        }
+
+        /* 이름 박스: 레퍼런스 느낌대로 너비 확대 및 여백 조정 */
         .user-name-box {
             background: #fff;
-            padding: 0 15px;
+            padding: 0 20px; /* 좌우 여백 확대 */
             border: 3px solid #000;
             display: flex;
             justify-content: space-between;
             align-items: center;
             height: 50px;
             box-sizing: border-box;
+            width: 100%; /* 너비 꽉 차게 */
         }
 
         .editable-name { outline: none; font-weight: 900; white-space: nowrap; font-size: 20px; flex-grow: 1; text-align: left; overflow: hidden; }
         .fixed-text { white-space: pre; font-size: 12px; color: #000; font-weight: 900; flex-shrink: 0; margin-left: 5px; }
 
-        /* 그리드 크기 절대 고정 */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
             margin-bottom: 25px;
-            align-items: start; /* 위쪽 정렬 고정 */
+            align-items: start;
         }
 
         .track-item {
@@ -96,21 +115,22 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            overflow: hidden; /* 영역 밖으로 나가지 못하게 고정 */
+            overflow: hidden;
         }
 
         .hashtag {
             font-size: 11px;
             font-weight: 900;
             margin-bottom: 5px;
-            height: 14px; /* 키워드 높이 고정 */
+            height: 14px;
         }
 
+        /* 테두리 제거: 앨범 커버 */
         .album-cover-container {
             width: 100%;
-            aspect-ratio: 1 / 1; /* 정사각형 비율 강제 */
+            aspect-ratio: 1 / 1;
             background-color: var(--nct-gray);
-            border: 2px solid #000;
+            border: none; /* 테두리 제거 (레퍼런스 반영) */
             cursor: pointer;
             display: flex;
             justify-content: center;
@@ -124,17 +144,18 @@
         .album-cover.uploaded { opacity: 1; }
         .cover-placeholder { position: absolute; font-size: 14px; color: #fff; font-weight: 900; z-index: 1; }
 
-        /* 노래 제목 박스 높이 및 너비 절대 고정 */
+        /* 테두리 제거 및 둥근 모서리: 노래 제목 박스 */
         .song-title-box {
             width: 100%;
             background: #fff;
-            border: 2px solid #000;
+            border: none; /* 테두리 제거 (레퍼런스 반영) */
+            border-radius: 15px; /* 모서리 둥글게 (레퍼런스 반영) */
             margin-top: 6px;
-            height: 32px; /* 높이 고정 */
+            height: 32px;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0 4px;
+            padding: 0 10px; /* 내부 여백 소폭 확대 */
             box-sizing: border-box;
             overflow: hidden;
         }
@@ -142,37 +163,64 @@
         .song-title-text {
             font-family: var(--font-hand);
             font-weight: bold;
-            font-size: 16px; /* 기본 크기 소폭 하향 */
+            font-size: 16px;
             white-space: nowrap;
             outline: none;
             max-width: 100%;
         }
 
-        /* 하단 Favorite 바 */
+        /* 하단 Favorite 바: 대폭 확대 (레퍼런스 반영) */
         .favorite-bar {
             background: #fff;
             border-radius: 20px;
-            padding: 15px;
+            padding: 20px; /* 내부 여백 확대 */
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 20px; /* 요소 간격 확대 */
             border: 3px solid #000;
-            height: 80px;
+            height: auto; /* 높이 자동 조절 */
             box-sizing: border-box;
+            min-height: 150px; /* 최소 높이 설정 */
         }
 
+        /* 맨 아래 노래 이미지 크기 더 키우기 (기존 50px -> 110px) */
         .fav-cover-container {
-            width: 50px; height: 50px; border-radius: 8px; border: 1px solid #000;
-            background-color: var(--nct-gray); cursor: pointer; display: flex;
-            justify-content: center; align-items: center; position: relative; overflow: hidden; flex-shrink: 0;
+            width: 110px;
+            height: 110px;
+            border-radius: 10px;
+            border: 2px solid #000;
+            background-color: var(--nct-gray);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
         }
 
         .fav-cover { width: 100%; height: 100%; object-fit: cover; opacity: 0; z-index: 2; }
         .fav-cover.uploaded { opacity: 1; }
-        .fav-placeholder { position: absolute; font-size: 10px; color: #fff; font-weight: 900; z-index: 1; }
+        .fav-placeholder { position: absolute; font-size: 16px; color: #fff; font-weight: 900; z-index: 1; }
 
-        .fav-info { flex-grow: 1; overflow: hidden; }
-        .fav-title { font-size: 22px; font-family: var(--font-hand); display: block; outline: none; white-space: nowrap; overflow: hidden; }
+        .fav-info { flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
+
+        /* 노래 제목 글씨 더 키우기 (기존 24px -> 36px) 및 비율 조정 */
+        .fav-title {
+            font-size: 36px; /* 대폭 확대 */
+            font-family: var(--font-hand);
+            display: block;
+            outline: none;
+            white-space: nowrap;
+            overflow: hidden;
+            margin-bottom: 10px; /* 재생 바와 간격 */
+            min-height: 44px; /* 최소 높이 설정 (앨범 이미지 높이의 40% 이상 확보) */
+        }
+
+        .progress-line-container { display: flex; justify-content: space-between; align-items: center; }
+        .progress-line { height: 6px; background: #eee; flex-grow: 1; margin-right: 15px; }
+        .progress-fill { width: 70%; height: 100%; background: #000; }
+        .my-favorite-text { font-size: 12px; color: #888; outline:none; flex-shrink: 0; }
 
         .submit-btn {
             background-color: var(--nct-neon); border: 3px solid #000;
@@ -224,9 +272,9 @@
         </div>
         <div class="fav-info">
             <span id="favTitle" class="fav-title" contenteditable="true" spellcheck="false" oninput="adjustSongFontSize(this)"></span>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
-                <div style="height: 4px; background: #eee; flex-grow: 1; margin-right: 10px;"><div style="width: 70%; height: 100%; background: #000;"></div></div>
-                <span style="font-size: 10px; color: #888;">My Favorite...</span>
+            <div class="progress-line-container">
+                <div class="progress-line"><div class="progress-fill"></div></div>
+                <span contenteditable="true" class="my-favorite-text">My Favorite...</span>
             </div>
         </div>
     </div>
@@ -251,7 +299,7 @@
 </div>
 
 <script>
-    const nctSongs = ["무한적아", "Cherry Bomb", "질주", "Fact Check", "Hello Future", "Hot Sauce", "Candy", "Baggy Jeans", "Sticker", "영웅", "Ay-Yo", "ISTJ", "Smoothie", "Phantom", "Favorite", "We Go Up", "Chewing Gum", "BOOM", "Broken Melodies", "일곱 번째 감각", "Walk"];
+    const nctSongs = ["무한적아", "Cherry Bomb", "질주", "Fact Check", "Hello Future", "Hot Sauce", "Candy", "Baggy Jeans", "Sticker", "영웅", "Ay-Yo", "ISTJ", "Smoothie", "Phantom", "Favorite", "We Go Up", "Chewing Gum", "BOOM", "Broken Melodies", "일곱 번째 감각", "Walk", "삐그덕"];
     const hashtags = ['#청량', '#설렘', '#벅참', '#신남', '#네오', '#슬픔', '#중독성', '#강렬', '#퍼포먼스'];
     
     const grid = document.getElementById('mainGrid');
@@ -290,12 +338,28 @@
         }
     }
 
+    // 노래 제목 글자 크기 조절 (그리드용)
     function adjustSongFontSize(el) {
         if(!el) return;
+        // 최애곡 영역은 스크립트로 크기 조절을 하지 않거나, 더 큰 최소 크기를 적용
+        if(el.id === 'favTitle') {
+            adjustFavFontSize(el);
+            return;
+        }
         let size = 16;
         el.style.fontSize = size + 'px';
         const parent = el.parentElement;
-        while (el.scrollWidth > parent.offsetWidth - 6 && size > 7) {
+        while (el.scrollWidth > parent.offsetWidth - 10 && size > 8) {
+            size--; el.style.fontSize = size + 'px';
+        }
+    }
+
+    // 최애곡 제목 전용 글자 크기 조절 (더 크게)
+    function adjustFavFontSize(el) {
+        let size = 36;
+        el.style.fontSize = size + 'px';
+        const parent = el.parentElement; // fav-info
+        while (el.scrollWidth > parent.offsetWidth - 10 && size > 18) {
             size--; el.style.fontSize = size + 'px';
         }
     }
@@ -305,7 +369,7 @@
         const favTitleEl = document.getElementById('favTitle');
         favTitleEl.innerText = randomFav;
         adjustNameFontSize();
-        adjustSongFontSize(favTitleEl);
+        adjustFavFontSize(favTitleEl); // 초기 로드 시 최애곡 크기 조절
     };
 
     function openSearch(index) {
@@ -334,7 +398,7 @@
                 const item = document.createElement('div');
                 item.className = 'result-item';
                 const highRes = song.artworkUrl100.replace('100x100bb', '600x600bb');
-                item.innerHTML = `<img src="${song.artworkUrl60}" style="width:30px;"><div><strong>${song.trackName}</strong></div>`;
+                item.innerHTML = `<img src="${song.artworkUrl60}" style="width:30px; border-radius:4px;"><div><strong>${song.trackName}</strong></div>`;
                 item.onclick = () => selectSong(highRes, song.trackName);
                 resDiv.appendChild(item);
             });
@@ -349,7 +413,8 @@
             img.src = coverUrl; img.classList.add('uploaded');
             if(ph) ph.style.display = 'none';
             const titleEl = document.getElementById('favTitle');
-            titleEl.innerText = title; adjustSongFontSize(titleEl);
+            titleEl.innerText = title; 
+            adjustFavFontSize(titleEl); // 최애곡 크기 조절
         } else {
             const item = document.getElementById(`item-${currentItemIndex}`);
             const img = item.querySelector('.album-cover');
