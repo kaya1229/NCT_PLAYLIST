@@ -12,6 +12,7 @@
         :root {
             --nct-neon: #CBFF00;
             --bg-yellow: #E2FF42;
+            --nct-gray: #CCCCCC; /* 기본 이미지용 회색 */
             --font-hand: 'Nanum Pen Script', cursive;
             --font-gothic: 'Pretendard', sans-serif;
         }
@@ -20,7 +21,7 @@
             background-color: #1a1a1a;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* 모바일에서 상단부터 노출 */
+            align-items: flex-start;
             min-height: 100vh;
             margin: 0;
             padding: 20px 10px;
@@ -31,7 +32,7 @@
         .playlist-card {
             background-color: var(--bg-yellow);
             width: 100%;
-            max-width: 450px; /* 모바일에서 더 크게 보이도록 조정 */
+            max-width: 450px;
             padding: 25px 15px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
@@ -39,7 +40,6 @@
             box-sizing: border-box;
         }
 
-        /* 프로필 영역 */
         .header {
             display: flex;
             align-items: center;
@@ -58,7 +58,7 @@
             border-radius: 50%;
             border: 3px solid #000;
             object-fit: cover;
-            background-color: #fff;
+            background-color: var(--nct-gray);
         }
 
         #profileInput { display: none; }
@@ -81,17 +81,31 @@
             border: 2px solid #000;
         }
 
+        /* 이름 입력 영역 - 's Playlist 고정 */
         .user-name-box {
             background: #fff;
             padding: 12px;
             border: 3px solid #000;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 900;
             text-align: center;
-            outline: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* 그리드 영역 */
+        .editable-name {
+            outline: none;
+            min-width: 50px;
+            display: inline-block;
+            border-bottom: 1px dashed #ccc; /* 입력 가능한 곳임을 표시 */
+            padding-right: 5px;
+        }
+
+        .fixed-text {
+            white-space: pre;
+        }
+
         .grid-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -114,7 +128,7 @@
         .album-cover {
             width: 100%;
             aspect-ratio: 1 / 1;
-            background-color: #fff;
+            background-color: var(--nct-gray);
             border: 2px solid #000;
             cursor: pointer;
             object-fit: cover;
@@ -133,7 +147,6 @@
             min-height: 24px;
         }
 
-        /* 최애곡 영역 */
         .favorite-bar {
             background: #fff;
             border-radius: 20px;
@@ -148,7 +161,8 @@
             width: 50px;
             height: 50px;
             border-radius: 8px;
-            border: 1px solid #eee;
+            border: 1px solid #000;
+            background-color: var(--nct-gray);
             cursor: pointer;
         }
 
@@ -159,7 +173,6 @@
             font-family: var(--font-hand);
             display: block;
             outline: none;
-            cursor: text;
         }
 
         .progress-line {
@@ -188,7 +201,7 @@
 
         .search-row {
             display: flex;
-            gap: 10px; /* 입력창과 버튼 간격 띄움 */
+            gap: 15px;
             margin-bottom: 15px;
         }
 
@@ -228,7 +241,7 @@
 <div class="playlist-card">
     <div class="header">
         <div class="profile-container" onclick="document.getElementById('profileInput').click()">
-            <img id="profileDisplay" src="https://via.placeholder.com/90?text=Profile" class="profile-img" alt="Profile">
+            <img id="profileDisplay" src="https://via.placeholder.com/90/CCCCCC/000000?text=NCT" class="profile-img" alt="Profile">
             <input type="file" id="profileInput" accept="image/*" onchange="loadProfile(event)">
         </div>
         <div class="title-area">
@@ -236,7 +249,10 @@
                 <span class="nct-badge">취향의 NCT</span>
                 <span style="font-size: 10px; font-weight: 900;">NCT 10TH ANNIVERSARY</span>
             </div>
-            <div class="user-name-box" contenteditable="true" spellcheck="false">쟈니컬 's Playlist</div>
+            <div class="user-name-box">
+                <span class="editable-name" contenteditable="true" spellcheck="false">쟈니컬</span>
+                <span class="fixed-text"> 's Playlist</span>
+            </div>
         </div>
     </div>
 
@@ -247,7 +263,7 @@
                 document.write(`
                     <div class="track-item" id="item-${index}">
                         <div class="hashtag">${tag}</div>
-                        <img class="album-cover" onclick="openSearch(${index})" src="https://via.placeholder.com/150?text=Select" alt="Select">
+                        <img class="album-cover" onclick="openSearch(${index})" src="https://via.placeholder.com/150/CCCCCC/000000?text=NCT" alt="Select">
                         <div class="song-title-box">곡 제목</div>
                     </div>
                 `);
@@ -256,7 +272,7 @@
     </div>
 
     <div class="favorite-bar">
-        <img src="https://via.placeholder.com/50?text=Art" class="fav-cover" onclick="openSearch('fav')">
+        <img src="https://via.placeholder.com/50/CCCCCC/000000?text=NCT" class="fav-cover" onclick="openSearch('fav')">
         <div class="fav-info">
             <span class="fav-title" contenteditable="true" spellcheck="false">질주 (2 Baddies)</span>
             <div class="progress-line"><div class="progress-fill"></div></div>
@@ -277,7 +293,6 @@
 <script>
     let currentItemIndex = null;
 
-    // 프로필 이미지 업로드 로직
     function loadProfile(event) {
         const output = document.getElementById('profileDisplay');
         output.src = URL.createObjectURL(event.target.files[0]);
@@ -311,7 +326,7 @@
                 item.className = 'result-item';
                 const highResCover = song.artworkUrl100.replace('100x100bb', '600x600bb');
                 item.innerHTML = `
-                    <img src="${song.artworkUrl60}" style="width:40px; border-radius:4px;">
+                    <img src="${song.artworkUrl60}" style="width:40px; border-radius:4px; border:1px solid #000;">
                     <div><strong>${song.trackName}</strong><br><small>${song.artistName}</small></div>
                 `;
                 item.onclick = () => selectSong(highResCover, song.trackName);
