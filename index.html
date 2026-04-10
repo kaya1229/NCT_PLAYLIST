@@ -107,14 +107,18 @@
             box-sizing: border-box; 
         }
         .song-title-text { 
-            font-family: var(--font-hand); 
-            font-weight: bold; 
-            font-size: 15px; 
-            white-space: nowrap; 
-            overflow: hidden; 
-            text-overflow: ellipsis;
-            text-align: center;
-        }
+    font-family: var(--font-hand); 
+    font-weight: bold; 
+    
+    font-size: clamp(12px, 4vw, 16px); 
+    
+    white-space: nowrap; 
+    width: 100%;
+    display: inline-block;
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    text-align: center;
+}
 
         /* --- 최애곡 박스 --- */
         .favorite-bar { background: var(--nct-light); border-radius: 15px; padding: 12px; display: flex; align-items: center; gap: 15px; border: none; cursor: pointer; }
