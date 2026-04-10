@@ -238,21 +238,16 @@
         }
 
         /* 등수 표시: 이미지 위에 작게 배지 형태 */
-        .rank-number {
+        /* 등수 표시: 동그라미 없이 숫자만 깔끔하게 */
+.rank-number {
     font-weight: 900;
-    font-size: 16px; /* 숫자를 조금 더 키움 */
-    color: #000;
-    background: var(--nct-neon);
-    border: 2px solid #000;
-    width: 24px;   /* 동그란 배지 형태 유지 */
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%; /* 숫자는 동그란 배지가 가장 잘 어울려요 */
+    font-size: 20px; /* 숫자가 잘 보이도록 크기를 키움 */
+    color: var(--nct-neon); /* NCT 네온 컬러로 포인트 */
+    -webkit-text-stroke: 1px #000; /* 검정 테두리를 살짝 주어 가독성 확보 */
     z-index: 10;
-    margin-bottom: -12px; /* 이미지와 살짝 겹침 */
+    margin-bottom: -15px; /* 이미지와 겹치게 배치 */
     font-family: var(--font-gothic);
+    text-shadow: 2px 2px 0px #000; /* 입체감을 살짝 주어 묻히지 않게 함 */
 }
 
         /* 멤버 이름 */
