@@ -92,13 +92,14 @@
             border: 3px solid #000;
             display: flex;
             align-items: center;
+            justify-content: center;
             height: 45px;
             box-sizing: border-box;
             width: 100%;
         }
 
-        .editable-name { outline: none; font-weight: 900; white-space: nowrap; font-size: 18px; flex-grow: 1; text-align: left; overflow: hidden; }
-        .fixed-text { white-space: pre; font-size: 11px; color: #000; font-weight: 900; flex-shrink: 0; margin-left: 4px; }
+        .editable-name { outline: none; font-weight: 900; white-space: nowrap; font-size: 18px; flex-grow: 0; text-align: right; overflow: hidden;max-width: 60%; }
+        .fixed-text { white-space: pre; font-size: 12px; color: #000; font-weight: 900; flex-shrink: 0; margin-left: 4px; }
 
         .grid-container {
             display: grid;
@@ -182,9 +183,67 @@
         }
         .search-row { display: flex; gap: 8px; margin-bottom: 12px; }
         .search-input { flex-grow: 1; padding: 10px; border: 2px solid #000; outline: none; }
-        .search-btn { padding: 10px 15px; background: var(--nct-neon); border: 2px solid #000; font-weight: bold; cursor: pointer; }
+        .search-btn { padding: 10px 15px; background: var(--nct-neon); border: 2px solid #000; font-weight: bold; border-radius: 8px; cursor: pointer; }
+        .close-modal-btn {
+    display: block;        /* 중앙 정렬을 위해 필요 */
+    margin: 15px auto 0;   /* 위쪽 여백 15px, 좌우 자동(중앙 정렬) */
+    padding: 10px 25px;    /* 좌우 패딩으로 너비 조절 */
+    background: #eee; 
+    border: 2px solid #000; 
+    border-radius: 8px;    /* 요청하신 둥근 모서리 */
+    font-weight: bold; 
+    cursor: pointer;
+    width: auto;           /* 콘텐츠에 맞게 너비 조절 */
+}
+
+/* 추가: 배경(모달 자체) 클릭 시 커서 모양을 기본으로 변경해 가독성 높이기 */
+.search-modal {
+    cursor: default;
+}
         .search-results { max-height: 250px; overflow-y: auto; }
         .result-item { display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; border-bottom: 1px solid #eee; }
+        /* 검색 중 로딩 애니메이션 (LP판) */
+.loading-lp-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    gap: 15px;
+    color: #666;
+    font-size: 14px;
+}
+
+.lp-spinner {
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, #333 15%, #111 16%, #111 20%, #222 21%, #111 25%, #222 26%, #111 100%);
+    border-radius: 50%;
+    border: 2px solid #000;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    
+    /* 회전 애니메이션 적용 */
+    animation: spinLP 2s linear infinite;
+}
+
+/* LP 중앙 구멍 (네온 그린 포인트) */
+.lp-spinner::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px; height: 10px;
+    background: var(--nct-neon); /* NCT 네온 그린 */
+    border-radius: 50%;
+    border: 2px solid #000;
+}
+
+/* 회전 애니메이션 정의 */
+@keyframes spinLP {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
     </style>
 </head>
 <body>
@@ -233,7 +292,7 @@
         <button class="search-btn" onclick="searchSong()">검색</button>
     </div>
     <div class="search-results" id="searchResults"></div>
-    <button style="width:100%; margin-top:10px; padding:10px; background:#eee; border:2px solid #000; font-weight:bold; cursor:pointer;" onclick="closeSearch()">닫기</button>
+    <button class="close-modal-btn" onclick="closeSearch()">닫기</button>
 </div>
 
 <div class="result-screen" id="resultScreen">
@@ -274,13 +333,16 @@
     }
 
     function adjustNameFontSize() {
-        const el = document.getElementById('userName');
-        let size = 18;
+    const el = document.getElementById('userName');
+    let size = 18;
+    el.style.fontSize = size + 'px';
+    
+    const parentWidth = el.parentElement.offsetWidth * 0.6; // 최대 너비 제한 대비
+    while (el.scrollWidth > parentWidth && size > 10) {
+        size--; 
         el.style.fontSize = size + 'px';
-        while (el.scrollWidth > el.offsetWidth && size > 10) {
-            size--; el.style.fontSize = size + 'px';
-        }
     }
+}
 
     function adjustSongFontSize(el) {
         if(!el) return;
@@ -293,7 +355,7 @@
     }
 
     function adjustFavFontSize(el) {
-        let size = 48;
+        let size = 37;
         el.style.fontSize = size + 'px';
         const parent = el.parentElement;
         while (el.scrollWidth > parent.offsetWidth && size > 20) {
@@ -322,24 +384,45 @@
     }
 
     async function searchSong() {
-        const query = document.getElementById('searchInput').value;
-        if (!query) return;
-        const resDiv = document.getElementById('searchResults');
-        resDiv.innerHTML = '검색 중...';
-        try {
-            const response = await fetch(`https://itunes.apple.com/search?term=NCT+${encodeURIComponent(query)}&entity=song&limit=15`);
-            const data = await response.json();
-            resDiv.innerHTML = '';
-            data.results.forEach(song => {
-                const item = document.createElement('div');
-                item.className = 'result-item';
-                const highRes = song.artworkUrl100.replace('100x100bb', '600x600bb');
-                item.innerHTML = `<img src="${song.artworkUrl60}" style="width:40px; border-radius:4px;"><div><strong>${song.trackName}</strong></div>`;
-                item.onclick = () => selectSong(highRes, song.trackName);
-                resDiv.appendChild(item);
-            });
-        } catch (e) { resDiv.innerHTML = '검색 실패'; }
+    const query = document.getElementById('searchInput').value;
+    if (!query) return;
+    const resDiv = document.getElementById('searchResults');
+    resDiv.innerHTML = `
+        <div class="loading-lp-container">
+            <div class="lp-spinner"></div>
+            <div>음악 검색 중...</div>
+        </div>
+    `;
+    
+    try {
+        const response = await fetch(`https://itunes.apple.com/search?term=NCT+${encodeURIComponent(query)}&entity=song&limit=15`);
+        const data = await response.json();
+        resDiv.innerHTML = '';
+
+        // 결과가 없을 경우 멘트 추가
+        if (data.results.length === 0) {
+            resDiv.innerHTML = `
+                <div style="text-align:center; padding:20px; color:#666;">
+                    검색 결과가 없습니다.<br>
+                    <strong>곡 제목을 영어로 검색해 보세요!</strong><br>
+                    <small>(예: 삐그덕 -> Walk)</small>
+                </div>`;
+            return;
+        }
+
+        data.results.forEach(song => {
+            const item = document.createElement('div');
+            item.className = 'result-item';
+            const highRes = song.artworkUrl100.replace('100x100bb', '600x600bb');
+            item.innerHTML = `<img src="${song.artworkUrl60}" style="width:40px; border-radius:4px;">
+                              <div><strong>${song.trackName}</strong></div>`;
+            item.onclick = () => selectSong(highRes, song.trackName);
+            resDiv.appendChild(item);
+        });
+    } catch (e) { 
+        resDiv.innerHTML = '검색 중 오류가 발생했습니다.'; 
     }
+}
 
     function selectSong(coverUrl, title) {
         if(currentItemIndex === 'fav') {
@@ -361,6 +444,14 @@
         }
         closeSearch();
     }
+    // 배경 클릭 시 모달 닫기
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('searchModal');
+    // 클릭된 대상이 'search-modal' 클래스를 가진 배경일 때만 닫기
+    if (event.target === modal) {
+        closeSearch();
+    }
+});
 
     function showRankResult() {
         const score = Math.floor(Math.random() * 41) + 60;
