@@ -137,6 +137,24 @@
         .search-input { flex-grow: 1; padding: 10px; border: 2px solid #000; outline: none; border-radius: 8px; }
         .search-btn { padding: 10px 15px; background: var(--nct-neon); border: 2px solid #000; font-weight: bold; cursor: pointer; border-radius: 8px; }
         .search-results { max-height: 250px; overflow-y: auto; }
+        .close-modal-btn {
+    width: 50%;             /* 너비를 팝업창에 꽉 차게 */
+    background-color: var(--nct-neon); /* NCT 시그니처 네온 컬러 */
+    border: 3px solid #000;  /* 검정 테두리 */
+    padding: 12px 0;         /* 버튼 높이감 조절 */
+    font-size: 16px; 
+    font-weight: 900;        /* 글씨 굵게 */
+    cursor: pointer; 
+    border-radius: 8px;     /* 모서리 둥글게 */
+    margin-top: 15px;        /* 위 결과창과 간격 */
+    box-shadow: 3px 3px 0px #000; /* 입체감 있는 그림자 */
+    transition: 0.1s;
+}
+
+.close-modal-btn:active {
+    box-shadow: 0px 0px 0px #000; 
+    transform: translate(3px, 3px); /* 클릭 시 버튼이 눌리는 효과 */
+}
         .result-item { display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; border-bottom: 1px solid #eee; }
     </style>
 </head>
@@ -184,7 +202,7 @@
         <button class="search-btn" onclick="searchSong()">검색</button>
     </div>
     <div class="search-results" id="searchResults"></div>
-    <button class="submit-btn" style="width:100%; margin-top:10px;" onclick="closeSearch()">닫기</button>
+    <button class="close-modal-btn" onclick="closeSearch()">닫기</button>
 </div>
 
 <div class="result-screen" id="resultScreen">
