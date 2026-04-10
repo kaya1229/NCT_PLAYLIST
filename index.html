@@ -259,38 +259,43 @@
 }
 
         /* 반대 취향 섹션 */
-        .opposite-section { 
-            margin-top: 20px; 
-            padding-top: 15px; 
-            border-top: 2px dashed #ccc; 
-            text-align: center;
-        }
+        /* --- 반대 취향 섹션 (중앙 정렬 + 둥근 네모) --- */
+.opposite-section { 
+    margin-top: 25px; 
+    padding-top: 15px; 
+    border-top: 2px dashed #ccc; 
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
 
-        .opposite-title { 
-            font-size: 14px; 
-            font-weight: 900; 
-            color: #ff4757; 
-            margin-bottom: 10px; 
-            display: block;
-        }
+.opposite-title { 
+    font-size: 16px; 
+    font-weight: 900; 
+    color: #ff4757; 
+    margin-bottom: 12px; 
+    display: block; 
+}
 
-        /* 반대 취향 이미지: 빨간색 테두리 */
-        .opposite-img { 
+/* 반대 취향 이미지: 80px 고정 둥근 네모 + 빨간색 테두리 */
+.opposite-img { 
     width: 80px; 
     height: 80px; 
-    border-radius: 12px; 
+    border-radius: 12px; /* 둥근 네모 */
     border: 3px solid #ff4757; 
     object-fit: cover; 
-    margin: 0 auto; /* 블록 요소일 때 중앙 정렬 */
+    margin: 0 auto; /* 이미지 중앙 정렬 */
+    display: block; /* margin: 0 auto 작동을 위해 필요 */
     background-color: #fff;
 }
 
-        .opposite-section { margin-top: 25px; padding-top: 15px; border-top: 2px dashed #ccc; text-align: left; }
-        .opposite-title { font-size: 16px; font-weight: 900; color: #ff4757; margin-bottom: 10px; }
-        .opposite-item { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; background: #fff5f5; border: 2px solid #ff4757; }
-        .opposite-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #ff4757; object-fit: cover; flex-shrink: 0; }
-
-        .share-btn { background-color: var(--nct-neon); border: 1px solid #000; padding: 12px; font-size: 16px; font-weight: 900; cursor: pointer; box-shadow: 1px 1px 0px #000; margin-top: 15px; border-radius: 10px; width: 100%; transition: 0.1s; }
+/* 이름 태그 (자바스크립트에서 추가할 클래스) */
+.member-name-tag {
+    font-weight: 900;
+    font-size: 14px;
+    margin-top: 8px;
+    color: #ff4757;
+    text-align: center;
+}
+        .share-btn { background-color: var(--nct-neon); border: 2px solid #000; padding: 12px; font-size: 16px; font-weight: 900; cursor: pointer; box-shadow: 1px 1px 0px #000; margin-top: 15px; border-radius: 10px; width: 100%; transition: 0.1s; }
         .share-btn:active { box-shadow: 0px 0px 0px #000; transform: translate(4px, 4px); }
     </style>
 </head>
@@ -352,7 +357,7 @@
             <div class="opposite-title">⚡ 극과 극 반대 취향</div>
             <div id="oppositeMember"></div>
         </div>
-        <button class="share-btn" style="width:50%; background:#eee; box-shadow:none; margin-top:10px; onclick="savePlaylistImage()">💚 취향표 공유하</button>
+        <button class="share-btn" style="width:50%; box-shadow:none; margin-top:10px; onclick="savePlaylistImage()">💚 취향표 공유하</button>
         <button class="close-modal-btn" style="width:50%; background:#eee; box-shadow:none; margin-top:10px;" onclick="location.reload()">다시하기</button>
     </div>
 </div>
