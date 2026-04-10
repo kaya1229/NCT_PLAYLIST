@@ -152,7 +152,7 @@
 
         .search-btn {
             background-color: var(--nct-neon);
-            border: 3px solid #000;
+            border: 2px solid #000;
             padding: 0 18px;
             font-weight: 900;
             cursor: pointer;
@@ -239,24 +239,29 @@
 
         /* 등수 표시: 이미지 위에 작게 배지 형태 */
         .rank-number {
-            font-weight: 900;
-            font-size: 12px;
-            color: #000;
-            background: var(--nct-neon);
-            border: 2px solid #000;
-            padding: 2px 6px;
-            border-radius: 8px;
-            z-index: 10;
-            margin-bottom: -12px; /* 이미지와 살짝 겹치게 */
-        }
+    font-weight: 900;
+    font-size: 16px; /* 숫자를 조금 더 키움 */
+    color: #000;
+    background: var(--nct-neon);
+    border: 2px solid #000;
+    width: 24px;   /* 동그란 배지 형태 유지 */
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; /* 숫자는 동그란 배지가 가장 잘 어울려요 */
+    z-index: 10;
+    margin-bottom: -12px; /* 이미지와 살짝 겹침 */
+    font-family: var(--font-gothic);
+}
 
         /* 멤버 이름 */
-        .member-name-tag {
-            font-weight: 900;
-            font-size: 13px;
-            color: #000;
-            margin-top: 5px;
-        }
+       .member-name-tag {
+    font-weight: 900;
+    font-size: 13px;
+    margin-top: 8px;
+    text-align: center;
+}
 
         /* 반대 취향 섹션 */
         .opposite-section { 
@@ -271,17 +276,19 @@
             font-weight: 900; 
             color: #ff4757; 
             margin-bottom: 10px; 
+            display: block;
         }
 
         /* 반대 취향 이미지: 빨간색 테두리 */
         .opposite-img { 
-            width: 80px; 
-            height: 80px; 
-            border-radius: 12px; 
-            border: 3px solid #ff4757; 
-            object-fit: cover; 
-            margin: 0 auto;
-        }
+    width: 80px; 
+    height: 80px; 
+    border-radius: 12px; 
+    border: 3px solid #ff4757; 
+    object-fit: cover; 
+    margin: 0 auto; /* 블록 요소일 때 중앙 정렬 */
+    background-color: #fff;
+}
 
         .opposite-section { margin-top: 25px; padding-top: 15px; border-top: 2px dashed #ccc; text-align: left; }
         .opposite-title { font-size: 16px; font-weight: 900; color: #ff4757; margin-bottom: 10px; }
@@ -477,21 +484,21 @@
         const rankList = document.getElementById('rankList');
         rankList.className = "rank-container";
         rankList.innerHTML = results.slice(0, 3).map((r, i) => `
-            <div class="rank-item">
-                <div class="rank-number">${i+1}위</div>
-                <img src="${r.img}" class="rank-img">
-                <div class="member-name-tag">${r.name}</div>
-            </div>
-        `).join('');
+    <div class="rank-item">
+        <div class="rank-number">${i+1}</div>
+        <img src="${r.img}" class="rank-img">
+        <div class="member-name-tag">${r.name}</div>
+    </div>
+`).join('');
 
         // 2. 극과 극 반대 취향 (빨간 테두리 이미지만 강조)
-        const opposite = results[results.length - 1];
-        document.getElementById('oppositeMember').innerHTML = `
-            <div style="text-align:center">
-                <img src="${opposite.img}" class="opposite-img">
-                <div class="member-name-tag" style="color:#ff4757">${opposite.name}</div>
-            </div>
-        `;
+       const opposite = results[results.length - 1];
+document.getElementById('oppositeMember').innerHTML = `
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        <img src="${opposite.img}" class="opposite-img">
+        <div class="member-name-tag" style="color:#ff4757">${opposite.name}</div>
+    </div>
+`;
 
         document.getElementById('resultScreen').style.display = 'block';
     }
