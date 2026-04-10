@@ -207,13 +207,81 @@
         @keyframes rotateLP { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .loading-lp::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 10px; background: var(--nct-neon); border-radius: 50%; }
 
-        .rank-container { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; text-align: left; }
-        .rank-item { display: flex; align-items: center; gap: 15px; padding: 10px 15px; border-radius: 12px; background: #f9f9f9; border: 2px solid #000; }
-        .rank-img { width: 55px; height: 55px; border-radius: 50%; border: 2px solid #000; object-fit: cover; flex-shrink: 0; }
-        .rank-info { flex-grow: 1; }
-        .rank-name { font-weight: 900; font-size: 16px; }
-        .rank-score { font-size: 13px; color: #666; font-weight: bold; }
-        .rank-number { font-weight: 900; font-size: 18px; color: var(--bg-yellow); -webkit-text-stroke: 1px #000; margin-right: 5px; }
+        /* 결과 컨테이너: 가로로 나열 및 중앙 정렬 */
+        .rank-container { 
+            display: flex; 
+            justify-content: center; 
+            gap: 12px; 
+            margin: 25px 0; 
+        }
+
+        /* 개별 아이템: 세로 정렬 (등수-이미지-이름) */
+        .rank-item { 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            background: none; /* 기존 배경색 제거 */
+            border: none;     /* 기존 테두리 제거 */
+            padding: 0;
+        }
+
+        /* 이미지 스타일: 80px 고정 둥근 네모 */
+        .rank-img { 
+            width: 80px; 
+            height: 80px; 
+            border-radius: 12px; 
+            border: 3px solid #000; 
+            object-fit: cover; 
+            flex-shrink: 0;
+            background: #fff;
+        }
+
+        /* 등수 표시: 이미지 위에 작게 배지 형태 */
+        .rank-number {
+            font-weight: 900;
+            font-size: 12px;
+            color: #000;
+            background: var(--nct-neon);
+            border: 2px solid #000;
+            padding: 2px 6px;
+            border-radius: 8px;
+            z-index: 10;
+            margin-bottom: -12px; /* 이미지와 살짝 겹치게 */
+        }
+
+        /* 멤버 이름 */
+        .member-name-tag {
+            font-weight: 900;
+            font-size: 13px;
+            color: #000;
+            margin-top: 5px;
+        }
+
+        /* 반대 취향 섹션 */
+        .opposite-section { 
+            margin-top: 20px; 
+            padding-top: 15px; 
+            border-top: 2px dashed #ccc; 
+            text-align: center;
+        }
+
+        .opposite-title { 
+            font-size: 14px; 
+            font-weight: 900; 
+            color: #ff4757; 
+            margin-bottom: 10px; 
+        }
+
+        /* 반대 취향 이미지: 빨간색 테두리 */
+        .opposite-img { 
+            width: 80px; 
+            height: 80px; 
+            border-radius: 12px; 
+            border: 3px solid #ff4757; 
+            object-fit: cover; 
+            margin: 0 auto;
+        }
 
         .opposite-section { margin-top: 25px; padding-top: 15px; border-top: 2px dashed #ccc; text-align: left; }
         .opposite-title { font-size: 16px; font-weight: 900; color: #ff4757; margin-bottom: 10px; }
@@ -282,7 +350,7 @@
             <div class="opposite-title">⚡ 극과 극 반대 취향</div>
             <div id="oppositeMember"></div>
         </div>
-        <button class="share-btn" onclick="savePlaylistImage()">💚 취향표 이미지 저장</button>
+        <button class="share-btn" style="width:50%; background:#eee; box-shadow:none; margin-top:10px; onclick="savePlaylistImage()">💚 취향표 공유하</button>
         <button class="close-modal-btn" style="width:50%; background:#eee; box-shadow:none; margin-top:10px;" onclick="location.reload()">다시하기</button>
     </div>
 </div>
@@ -408,27 +476,23 @@
         document.getElementById('syncScore').innerText = results[0].finalScore;
         const rankList = document.getElementById('rankList');
         rankList.className = "rank-container";
-        rankList.innerHTML = results.slice(0,3).map((r, i) => `
+        rankList.innerHTML = results.slice(0, 3).map((r, i) => `
             <div class="rank-item">
-                <div class="rank-number">${i+1}</div>
+                <div class="rank-number">${i+1}위</div>
                 <img src="${r.img}" class="rank-img">
-                <div class="rank-info">
-                    <div class="rank-name">💚 ${r.name}</div>
-                    <div class="rank-score">싱크로율 ${r.finalScore}%</div>
-                </div>
+                <div class="member-name-tag">${r.name}</div>
             </div>
         `).join('');
 
+        // 2. 극과 극 반대 취향 (빨간 테두리 이미지만 강조)
         const opposite = results[results.length - 1];
         document.getElementById('oppositeMember').innerHTML = `
-            <div class="opposite-item">
+            <div style="text-align:center">
                 <img src="${opposite.img}" class="opposite-img">
-                <div class="rank-info">
-                    <div class="rank-name" style="color:#ff4757">⚡ ${opposite.name}</div>
-                    <div class="rank-score" style="color:#ff4757">싱크로율 ${opposite.finalScore}%</div>
-                </div>
+                <div class="member-name-tag" style="color:#ff4757">${opposite.name}</div>
             </div>
         `;
+
         document.getElementById('resultScreen').style.display = 'block';
     }
 
