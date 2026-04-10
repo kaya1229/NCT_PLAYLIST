@@ -212,7 +212,7 @@
     </div>
 </div>
 
-<button class="submit-btn" onclick="showRankResult()">💚 소울메이트 찾기</button>
+<button class="submit-btn" onclick="showRankResult()">제출하기</button>
 
 <div class="search-modal" id="searchModal">
     <div class="search-row">
@@ -235,29 +235,39 @@
 </div>
 
 <script>
-    // 1. 멤버별 데이터 베이스 (이미지 필드 추가)
     const memberData = [
-        { name: "태용", img: "https://via.placeholder.com/100", tracks: ["PADO", "Touch", "Kick It", "Make a wish", "Black on Black", "From home", "Baby don't stop", "Baggy Jeans", "Universe"], favorite: "Misfit" },
-        { name: "쟈니", img: "https://via.placeholder.com/100", tracks: ["Ice tea", "surf", "broken melodies", "fact check", "parade", "from home", "baggy jeans", "gas", "cherry bomb"], favorite: "2 Baddies" },
-        { name: "유타", img: "https://via.placeholder.com/100", tracks: ["touch", "promise you", "Fire Truck", "sunny road", "from home", "back 2u", "fact check", "2 Baddies", "boss"], favorite: "Kick It" },
-        { name: "쿤", img: "https://via.placeholder.com/100", tracks: ["rainy day", "sweet dream", "love talk", "Kick It", "The 7th Sense", "No Longer", "kick back", "phantom", "baggy jeans"], favorite: "first time" },
-        { name: "텐", img: "https://via.placeholder.com/100", tracks: ["steady", "beautiful", "resonance", "misfit", "baggy jeans", "from home", "baby don't stop", "work it", "make a wish"], favorite: "that's not fair" },
-        { name: "재현", img: "https://via.placeholder.com/100", tracks: ["Baggy Jeans", "PADO", "Try Again", "Kick It", "Boss", "Without You", "Coming Home", "Ay-Yo", "Lemonade"], favorite: "Love Me Now" },
-        { name: "윈윈", img: "https://via.placeholder.com/100", tracks: ["Boss", "Touch", "90's Love", "Fire Truck", "Regular", "Take Off", "Turn Back Time", "Kick Back", "Phantom"], favorite: "Moonwalk" },
-        { name: "정우", img: "https://via.placeholder.com/100", tracks: ["Boss", "Touch", "Regular", "Punch", "Favorite", "2 Baddies", "Fact Check", "PADO", "Dreamer"], favorite: "Welcome To My Playground" },
-        { name: "마크", img: "https://via.placeholder.com/100", tracks: ["Baggy Jeans", "Misfit", "90's Love", "The 7th Sense", "Cherry Bomb", "Boss", "Golden Age", "Universe", "Fact Check"], favorite: "2 Baddies" },
-        { name: "샤오쥔", img: "https://via.placeholder.com/100", tracks: ["beautiful", "all about you", "my everything", "the beat", "cherry bomb", "love after me", "baggy jeans", "turn back time", "resonance"], favorite: "cherry bomb" },
-        { name: "헨드리", img: "https://via.placeholder.com/100", tracks: ["pado", "baby don't stop", "from home", "90's love", "The 7th Sense", "beautiful", "cherry bomb", "the beat", "call D"], favorite: "misfit" },
-        { name: "런쥔", img: "https://via.placeholder.com/100", tracks: ["Beatbox", "Candle Light", "Trigger the Fever", "Moonlight", "The 7th Sense", "My Everything", "Candy", "Smoothie", "Beat it up"], favorite: "Hot Sauce" },
-        { name: "제노", img: "https://via.placeholder.com/100", tracks: ["Wish", "Touch", "Hello Future", "Fact Check", "Work It", "To My First", "Baggy Jeans", "Far", "Kick It"], favorite: "The 7th Sense" },
-        { name: "해찬", img: "https://via.placeholder.com/100", tracks: ["Hello Future", "Focus", "Dream Comes True", "Misfit", "Mad Dog", "Back 2U", "Baggy Jeans", "Kick It", "The 7th Sense"], favorite: "Kick It" },
-        { name: "재민", img: "https://via.placeholder.com/100", tracks: ["We Go Up", "Focus", "No Longer", "Dream Team", "Work It", "Dear Dream", "Chiller", "The 7th Sense", "Make a Wish"], favorite: "Graduation" },
-        { name: "양양", img: "https://via.placeholder.com/100", tracks: ["Chewing Gum", "My Everything", "Eternal White", "90's Love", "That's not fair", "Gold Dust", "Kick It", "The 7th Sense", "Universe"], favorite: "New Axis" },
-        { name: "천러", img: "https://via.placeholder.com/100", tracks: ["Hello Future", "Moon", "Broken Melodies", "Trigger the Fever", "Cherry Bomb", "Graduation", "Beat it up", "Turn back time", "Kick It"], favorite: "My Youth" },
-        { name: "지성", img: "https://via.placeholder.com/100", tracks: ["Dunk Shot", "Vroom", "My Youth", "Trigger the Fever", "Work It", "Dear Dream", "Make a Wish", "Kick It", "Black on Black"], favorite: "I hate fruits" },
-        { name: "성찬", img: "https://via.placeholder.com/100", tracks: ["90's Love", "Misfit", "Light Bulb", "Resonance", "Universe", "Beautiful", "Golden Age", "Fact Check", "Baggy Jeans"], favorite: "Vroom" },
-        { name: "쇼타로", img: "https://via.placeholder.com/100", tracks: ["Make a Wish", "Work It", "Beautiful", "Universe", "Universe", "Golden Age", "PADO", "Baggy Jeans", "Fact Check"], favorite: "Universe" }
-    ];
+    { name: "태용", img: "https://via.placeholder.com/100", tracks: ["PADO", "Touch", "영웅", "Make a wish", "Black on Black", "From home", "Baby don't stop", "Baggy Jeans", "Universe"], favorite: "Misfit" },
+    { name: "쟈니", img: "https://via.placeholder.com/100", tracks: ["Ice tea", "surf", "broken melodies", "fact check", "parade", "from home", "baggy jeans", "gas", "cherry bomb"], favorite: "질주" },
+    { name: "유타", img: "https://via.placeholder.com/100", tracks: ["touch", "promise you", "소방차", "sunny road", "from home", "back 2u", "fact check", "2baddies", "boss"], favorite: "영웅" },
+    { name: "쿤", img: "https://via.placeholder.com/100", tracks: ["rainy day", "sweet dream", "love talk", "영웅", "the 7th sense", "no longer", "kick back", "phantom", "baggy jeans"], favorite: "first time" },
+    { name: "텐", img: "https://via.placeholder.com/100", tracks: ["steady", "beautiful", "resonance", "misfit", "baggy jeans", "from home", "baby don't stop", "work it", "make a wish"], favorite: "that's not fair" },
+    { name: "샤오쥔", img: "https://via.placeholder.com/100", tracks: ["beautiful", "all about you", "my everything", "the beat", "cherry bomb", "love after me", "baggy jeans", "turn back time", "resonance"], favorite: "cherry bomb" },
+    { name: "헨드리", img: "https://via.placeholder.com/100", tracks: ["pado", "baby don't stop", "from home", "90's love", "the 7th sense", "beautiful", "cherry bomb", "the beat", "call D"], favorite: "misfit" },
+    { name: "런쥔", img: "https://via.placeholder.com/100", tracks: ["비트박스", "사랑한단 뜻이야", "트리거더피버", "문라잇", "일곱번째 감각", "my everything", "캔디", "스무디", "Beat it up"], favorite: "맛" },
+    { name: "제노", img: "https://via.placeholder.com/100", tracks: ["Wish", "Touch", "Hello Future", "Fact Check", "Work It", "마지막 인사", "Baggy Jeans", "Far", "영웅"], favorite: "일곱번째 감각" },
+    { name: "해찬", img: "https://via.placeholder.com/100", tracks: ["Hello Future", "주인공", "Dream Comes True", "Misfit", "뿔", "Back 2U", "Baggy Jeans", "영웅", "일곱번째 감각"], favorite: "Kick It" },
+    { name: "재민", img: "https://via.placeholder.com/100", tracks: ["We Go Up", "주인공", "나의 모든 순간", "Dream Team", "Work It", "Dear Dream", "Chiller", "일곱번째 감각", "Make a Wish"], favorite: "Graduation" },
+    { name: "양양", img: "https://via.placeholder.com/100", tracks: ["Chewing Gum", "My Everything", "Eternal White", "90's Love", "That's not fair", "윤슬", "영웅", "The 7th sense", "Universe"], favorite: "New Axis" },
+    { name: "천러", img: "https://via.placeholder.com/100", tracks: ["Hello Future", "문", "Broken Melodies", "Trigger the Fever", "Cherry Bomb", "Graduation", "Beat it up", "Turn back time", "영웅"], favorite: "우리의 계절" },
+    { name: "지성", img: "https://via.placeholder.com/100", tracks: ["덩크슛", "Vroom", "우리의 계절", "Trigger the Fever", "Work It", "Dear Dream", "Make a Wish", "영웅", "Black on Black"], favorite: "I hate fruits" },
+    { name: "시온", img: "https://via.placeholder.com/100", tracks: ["Steady", "Touch", "텐데", "마지막 첫사랑", "소방차", "윤슬", "Kick It", "Black on Black", "Cherry Bomb"], favorite: "Baggy Jeans" },
+    { name: "리쿠", img: "https://via.placeholder.com/100", tracks: ["Hello Future", "1000", "Misfit", "Make You Shine", "The 7th Sense", "나쁜 짓", "Hellow Mellow", "영웅", "Baggy Jeans"], favorite: "Steady" },
+    { name: "유우시", img: "https://via.placeholder.com/100", tracks: ["We Go Up", "Once Again", "Favorite", "Work It", "영웅", "백야", "영웅", "Cherry Bomb", "Resonance"], favorite: "Wish" },
+    { name: "재희", img: "https://via.placeholder.com/100", tracks: ["Wish", "First Time", "Broken Melodies", "프린스핑송", "일곱번째 감각", "나의 모든 순간", "영웅", "Ay-Yo", "Baggy Jeans"], favorite: "Coming Home" },
+    { name: "료", img: "https://via.placeholder.com/100", tracks: ["Hello Future", "Sun&Moon", "Timeless", "0 Mile", "The 7th Sense", "Fly Away With Me", "Steady", "Mad City", "Baggy Jeans"], favorite: "나쁜 짓" },
+    { name: "사쿠야", img: "https://via.placeholder.com/100", tracks: ["Best Friend Ever", "I.O.U", "Kick Back", "Paradise", "New Axis", "피아노", "백열등", "Gimme Gimme", "PADO"], favorite: "Dancing In The Rain" }
+];
+
+const titleAlias = {
+    "맛": "Hot Sauce", "영웅": "Kick It", "질주": "2 Baddies", "소방차": "Fire Truck",
+    "사랑한단뜻이야": "Candle Light", "트리거더피버": "Trigger the Fever", 
+    "일곱번째감각": "The 7th Sense", "캔디": "Candy", "스무디": "Smoothie",
+    "마지막인사": "To My First", "뿔": "Mad Dog", "윤슬": "Gold Dust", 
+    "우리의계절": "My Youth", "마지막첫사랑": "My First and Last", "문": "Moon",
+    "주인공": "Focus", "나의모든순간": "No Longer", "덩크슛": "Dunk Shot", "텐데": "Timeless",
+    "나쁜짓": "Baby Dont Like It", "백야": "White Night", "프린스핑송": "Ping Pong",
+    "백열등": "Light Bulb", "피아노": "Piano"
+};
 
     const hashtags = ['#청량', '#설렘', '#벅참', '#신남', '#네오', '#슬픔', '#중독성', '#강렬', '#퍼포먼스'];
     const grid = document.getElementById('mainGrid');
