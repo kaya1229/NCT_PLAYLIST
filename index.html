@@ -76,7 +76,7 @@
         /* --- 그리드 영역 --- */
         .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
         .track-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; gap: 6px; width: 100%; overflow: hidden; }
-        .hashtag { font-size: 10px; font-weight: 900; margin-bottom: 2px; }
+        .hashtag { font-size: 10px; color: #888888; font-weight: 900; margin-bottom: 2px; }
         
         .album-cover-container { 
             width: 100%; 
@@ -248,7 +248,7 @@
     -webkit-text-stroke: 1.5px #000;
     z-index: 10;
     margin-bottom: -15px;
-    filter: drop-shadow(2px 2px 0px #000); /* 형광색 그림자로 포인트 */
+    
 }
 
         /* 멤버 이름 */
@@ -342,16 +342,16 @@
 
 <div class="result-screen" id="resultScreen">
     <div style="text-align:center">
-        <h2 style="margin-top:0">우리의 싱크로율</h2>
+        <h2 style="margin-top:0">💚취향 일치율💚</h2>
         <div style="width: 80px; height: 80px; background:#000; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:10px auto; font-size:24px; font-weight:bold; border:3px solid var(--nct-neon)">
             <span id="syncScore">0</span>%
         </div>
         <div id="rankList"></div>
         <div class="opposite-section">
-            <div class="opposite-title">⚡ 극과 극 반대 취향</div>
+            <div class="opposite-title"> 극과 극 반대 취향</div>
             <div id="oppositeMember"></div>
         </div>
-        <button class="share-btn" style="width:50%; box-shadow:none; margin-top:10px; onclick="savePlaylistImage()">💚 취향표 공유하</button>
+        <button class="share-btn" style="width:50%; box-shadow:none; margin-top:10px; onclick="savePlaylistImage()">취향표 공유하기</button>
         <button class="close-modal-btn" style="width:50%; background:#eee; box-shadow:none; margin-top:10px;" onclick="location.reload()">다시하기</button>
     </div>
 </div>
