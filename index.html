@@ -69,62 +69,71 @@
 
         /* 그리드 영역: 테두리 제거 및 간격 조정 */
         .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
-        .track-item { display: flex; flex-direction: column; align-items: center; width: 100%; cursor: pointer; gap: 6px; } /* gap 추가 */
+        .track-item { display: flex; flex-direction: column; align-items: center; width: 100%; cursor: pointer; gap: 6px; }
         .hashtag { font-size: 10px; font-weight: 900; margin-bottom: 2px; }
         .album-cover-container {
             width: 100%; aspect-ratio: 1/1; background-color: #fff; border-radius: 12px;
-            border: none; position: relative; overflow: hidden; /* 테두리 제거 */
+            border: none; position: relative; overflow: hidden;
         }
         .album-cover { width: 100%; height: 100%; object-fit: cover; opacity: 0; z-index: 2; }
         .album-cover.uploaded { opacity: 1; }
+        
+        /* 곡 제목 칸: 테두리 제거 */
         .song-title-box {
-            width: 100%; background: var(--nct-light); border: 2.5px solid #000;
-            border-radius: 6px; height: 26px; /* 높이 약간 조절 */
+            width: 100%; background: var(--nct-light); border: none;
+            border-radius: 6px; height: 26px;
             display: flex; justify-content: center; align-items: center; padding: 0 4px;
         }
         .song-title-text { font-family: var(--font-hand); font-weight: bold; font-size: 14px; white-space: nowrap; overflow: hidden; }
 
-        /* 하단 영역: 테두리 제거 및 스타일 유지 */
+        /* 하단 최애곡 영역: 레퍼런스 재생바 적용 */
         .favorite-bar {
             background: var(--nct-light); border-radius: 15px; padding: 12px;
             display: flex; align-items: center; gap: 15px; border: 3px solid #000; cursor: pointer;
         }
         .fav-cover-container {
-            width: 65px; height: 65px; border-radius: 8px; border: none; /* 테두리 제거 */
+            width: 65px; height: 65px; border-radius: 8px; border: none;
             background-color: #fff; position: relative; overflow: hidden; flex-shrink: 0;
         }
         .fav-cover { width: 100%; height: 100%; object-fit: cover; opacity: 0; }
         .fav-cover.uploaded { opacity: 1; }
         .fav-info { flex-grow: 1; overflow: hidden; }
-        .fav-title { font-size: 34px; font-family: var(--font-hand); line-height: 1; display: block; margin-bottom: 6px; }
-        .progress-line { height: 4px; background: #000; width: 100%; }
+        .fav-title { font-size: 34px; font-family: var(--font-hand); line-height: 1; display: block; margin-bottom: 8px; }
+        
+        .progress-container { width: 100%; height: 5px; background: #bbb; position: relative; border-radius: 2px; overflow: hidden; }
+        .progress-fill { width: 70%; height: 100%; background: #000; }
         .my-favorite-text { font-size: 10px; font-weight: 900; text-align: right; display: block; margin-top: 4px; }
 
         .submit-btn {
             background-color: var(--nct-neon); border: 3px solid #000;
             padding: 12px 40px; font-size: 18px; font-weight: 900;
-            cursor: pointer; box-shadow: 4px 4px 0px #000; margin-top: 25px; transition: 0.1s;
+            cursor: pointer; box-shadow: 4px 4px 0px #000; margin-top: 25px; transition: 0.1s; border-radius: 10px;
         }
         .submit-btn:active { box-shadow: 0px 0px 0px #000; transform: translate(4px, 4px); }
 
-        /* 기존 검색 모달 스타일 유지 */
+        /* 검색 모달: 버튼 둥글게, LP 네오 스타일 */
         .search-modal, .result-screen {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             background: #fff; padding: 25px; border: 4px solid #000; width: 85%; max-width: 400px; z-index: 1000;
-            box-shadow: 0 0 0 100vmax rgba(0,0,0,0.8);
+            box-shadow: 0 0 0 100vmax rgba(0,0,0,0.8); border-radius: 15px;
         }
         .search-row { display: flex; gap: 8px; margin-bottom: 12px; }
-        .search-input { flex-grow: 1; padding: 10px; border: 2px solid #000; outline: none; }
-        .search-btn { padding: 10px 15px; background: var(--nct-neon); border: 2px solid #000; font-weight: bold; cursor: pointer; }
+        .search-input { flex-grow: 1; padding: 10px; border: 2px solid #000; outline: none; border-radius: 8px; }
+        .search-btn { padding: 10px 15px; background: var(--nct-neon); border: 2px solid #000; font-weight: bold; cursor: pointer; border-radius: 8px; }
         .search-results { max-height: 250px; overflow-y: auto; }
         .result-item { display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; border-bottom: 1px solid #eee; }
-        .close-modal-btn { display: block; margin: 15px auto 0; padding: 8px 20px; border: 2px solid #000; background: #eee; cursor: pointer; font-weight: bold; }
+        .close-modal-btn { display: block; margin: 15px auto 0; padding: 8px 25px; border: 2px solid #000; background: #eee; cursor: pointer; font-weight: bold; border-radius: 20px; }
 
-        /* 로딩 애니메이션 */
-        .loading-lp-container { display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        /* LP판 애니메이션 */
+        .loading-lp-container { display: flex; flex-direction: column; align-items: center; padding: 30px; gap: 20px; }
         .lp-spinner {
-            width: 50px; height: 50px; background: radial-gradient(circle, #333 15%, #111 100%);
-            border-radius: 50%; border: 2px solid #000; animation: spinLP 1s linear infinite;
+            width: 60px; height: 60px; 
+            background: radial-gradient(circle, #333 15%, #111 20%, #222 25%, #111 100%);
+            border-radius: 50%; border: 2px solid #000; position: relative; animation: spinLP 1.5s linear infinite;
+        }
+        .lp-spinner::after {
+            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 12px; height: 12px; background: var(--nct-neon); border-radius: 50%; border: 1.5px solid #000;
         }
         @keyframes spinLP { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
@@ -158,7 +167,9 @@
         </div>
         <div class="fav-info">
             <span id="favTitle" class="fav-title">선택안함</span>
-            <div class="progress-line"></div>
+            <div class="progress-container">
+                <div class="progress-fill"></div>
+            </div>
             <span class="my-favorite-text">My Favorite...</span>
         </div>
     </div>
@@ -168,7 +179,7 @@
 
 <div class="search-modal" id="searchModal">
     <div class="search-row">
-        <input type="text" class="search-input" id="searchInput" placeholder="곡 제목 입력">
+        <input type="text" class="search-input" id="searchInput" placeholder="곡 제목 입력 (영문 권장)">
         <button class="search-btn" onclick="searchSong()">검색</button>
     </div>
     <div class="search-results" id="searchResults"></div>
@@ -181,13 +192,13 @@
         <div style="width: 80px; height: 80px; background:#000; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:10px auto; font-size:24px; font-weight:bold; border:3px solid var(--nct-neon)">
             <span id="syncScore">0</span>%
         </div>
-        <div id="rankList" style="text-align:left; margin:15px 0"></div>
+        <div id="rankList" style="text-align:left; margin:15px 0; font-size: 14px; font-weight: bold;"></div>
         <button class="submit-btn" style="width:100%" onclick="closeResult()">닫기</button>
     </div>
 </div>
 
 <script>
-    /* 데이터 및 로직 (20명 멤버 DB 및 Alias 포함) */
+    // 1. 멤버 데이터 DB
     const memberData = [
         { name: "태용", tracks: ["PADO", "Touch", "Kick It", "Make a wish", "Black on Black", "From home", "Baby don't stop", "Baggy Jeans", "Universe"], favorite: "Misfit" },
         { name: "쟈니", tracks: ["Ice tea", "surf", "broken melodies", "fact check", "parade", "from home", "baggy jeans", "gas", "cherry bomb"], favorite: "2 Baddies" },
@@ -213,9 +224,11 @@
 
     const titleAlias = {
         "맛": "Hot Sauce", "영웅": "Kick It", "질주": "2 Baddies", "소방차": "Fire Truck",
-        "사랑한단뜻이야": "Candle Light", "트리거더피버": "Trigger the Fever", "일곱번째감각": "The 7th Sense"
+        "사랑한단뜻이야": "Candle Light", "트리거더피버": "Trigger the Fever", "일곱번째감각": "The 7th Sense",
+        "캔디": "Candy", "스무디": "Smoothie", "무한적아": "Limitless", "체리밤": "Cherry Bomb"
     };
 
+    // 2. 그리드 생성
     const hashtags = ['#청량', '#설렘', '#벅참', '#신남', '#네오', '#슬픔', '#중독성', '#강렬', '#퍼포먼스'];
     const grid = document.getElementById('mainGrid');
     hashtags.forEach((tag, index) => {
@@ -234,6 +247,7 @@
 
     let currentItemIndex = null;
 
+    // 3. 기능 함수들
     function openSearch(idx) { currentItemIndex = idx; document.getElementById('searchModal').style.display = 'block'; }
     function closeSearch() { document.getElementById('searchModal').style.display = 'none'; }
 
@@ -241,28 +255,34 @@
         const query = document.getElementById('searchInput').value;
         if(!query) return;
         const resDiv = document.getElementById('searchResults');
-        resDiv.innerHTML = `<div class="loading-lp-container"><div class="lp-spinner"></div><div>NCT 음악 찾는 중...</div></div>`;
-        const res = await fetch(`https://itunes.apple.com/search?term=NCT+${query}&entity=song&limit=10`);
-        const data = await res.json();
-        resDiv.innerHTML = '';
-        data.results.forEach(s => {
-            const div = document.createElement('div');
-            div.className = 'result-item';
-            div.innerHTML = `<img src="${s.artworkUrl60}" style="width:40px">${s.trackName}`;
-            div.onclick = () => selectSong(s.artworkUrl100.replace('100x100bb', '600x600bb'), s.trackName);
-            resDiv.appendChild(div);
-        });
+        resDiv.innerHTML = `<div class="loading-lp-container"><div class="lp-spinner"></div><div>음악 감상 중...</div></div>`;
+        
+        try {
+            const res = await fetch(`https://itunes.apple.com/search?term=NCT+${encodeURIComponent(query)}&entity=song&limit=15`);
+            const data = await res.json();
+            resDiv.innerHTML = '';
+            if(data.results.length === 0) { resDiv.innerHTML = '<p style="text-align:center">검색 결과가 없습니다.</p>'; return; }
+
+            data.results.forEach(s => {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                div.innerHTML = `<img src="${s.artworkUrl60}" style="width:40px; border-radius:4px; margin-right:10px;">
+                                 <div><strong>${s.trackName}</strong><br><small>${s.artistName}</small></div>`;
+                div.onclick = () => selectSong(s.artworkUrl100.replace('100x100bb', '600x600bb'), s.trackName);
+                resDiv.appendChild(div);
+            });
+        } catch (e) { resDiv.innerHTML = '오류가 발생했습니다.'; }
     }
 
     function selectSong(url, title) {
         if(currentItemIndex === 'fav') {
-            document.getElementById('favCover').src = url;
-            document.getElementById('favCover').classList.add('uploaded');
+            const cover = document.getElementById('favCover');
+            cover.src = url; cover.classList.add('uploaded');
             document.getElementById('favTitle').innerText = title;
         } else {
             const item = document.getElementById(`item-${currentItemIndex}`);
-            item.querySelector('.album-cover').src = url;
-            item.querySelector('.album-cover').classList.add('uploaded');
+            const cover = item.querySelector('.album-cover');
+            cover.src = url; cover.classList.add('uploaded');
             item.querySelector('.song-title-text').innerText = title;
         }
         closeSearch();
@@ -277,28 +297,40 @@
     function showRankResult() {
         const userSongs = Array.from({length: 9}, (_, i) => document.querySelector(`#item-${i} .song-title-text`).innerText);
         const userFav = document.getElementById('favTitle').innerText;
+        
         const results = memberData.map(m => {
-            let s = 0;
+            let score = 0;
+            const normMemberTracks = m.tracks.map(t => normalizeTitle(t));
             userSongs.forEach((song, i) => {
                 if(!song) return;
-                if(normalizeTitle(song) === normalizeTitle(m.tracks[i])) s += 10;
-                else if(m.tracks.map(t => normalizeTitle(t)).includes(normalizeTitle(song))) s += 5;
+                const normUser = normalizeTitle(song);
+                if(normUser === normMemberTracks[i]) score += 10;
+                else if(normMemberTracks.includes(normUser)) score += 5;
             });
-            if(normalizeTitle(userFav) === normalizeTitle(m.favorite)) s += 15;
-            return { name: m.name, score: Math.min(Math.round((s/105)*100), 100) };
+            if(normalizeTitle(userFav) === normalizeTitle(m.favorite)) score += 15;
+            return { name: m.name, score: Math.min(Math.round((score/105)*100), 100) };
         }).sort((a,b) => b.score - a.score);
 
         document.getElementById('syncScore').innerText = results[0].score;
-        document.getElementById('rankList').innerHTML = results.slice(0,3).map((r, i) => `<div>${i+1}위: ${r.name} (${r.score}%)</div>`).join('');
+        document.getElementById('rankList').innerHTML = results.slice(0,3).map((r, i) => 
+            `<div style="padding:8px 0; border-bottom:1px solid #eee;">${i+1}위: ${r.name} (${r.score}%)</div>`
+        ).join('');
         document.getElementById('resultScreen').style.display = 'block';
     }
 
     function loadProfile(e) {
+        if(!e.target.files[0]) return;
         document.getElementById('profileDisplay').src = URL.createObjectURL(e.target.files[0]);
         document.getElementById('profileDisplay').classList.add('uploaded');
         document.querySelector('.profile-placeholder').style.display = 'none';
     }
+
     function closeResult() { document.getElementById('resultScreen').style.display = 'none'; }
+    window.onclick = (e) => { 
+        if(e.target.id === 'searchModal') closeSearch(); 
+        if(e.target.id === 'resultScreen') closeResult();
+    };
 </script>
+
 </body>
 </html>
