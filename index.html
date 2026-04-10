@@ -7,6 +7,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <style>
         :root {
@@ -48,7 +49,7 @@
             background-color: var(--nct-light); cursor: pointer; position: relative; overflow: hidden;
             display: flex; justify-content: center; align-items: center; flex-shrink: 0;
         }
-        .profile-img { width: 100%; height: 100%; object-fit: cover; opacity: 0; z-index: 2; }
+        .profile-img { width: 100%; height: 100%; object-fit: cover; opacity: 0; z-index: 2; position: absolute; top:0; left:0; }
         .profile-img.uploaded { opacity: 1; }
         .profile-placeholder { position: absolute; font-size: 14px; color: #000; font-weight: 900; z-index: 1; }
 
@@ -69,7 +70,7 @@
             border-radius: 8px; display: flex; align-items: center; justify-content: flex-end; height: 45px;
             box-sizing: border-box; width: 100%;
         }
-        .editable-name { outline: none; font-weight: 900; font-size: 18px; text-align: right; }
+        .editable-name { outline: none; font-weight: 900; font-size: 18px; text-align: right; min-width: 50px; }
         .fixed-text { font-size: 14px; font-weight: 900; margin-left: 4px; }
 
         /* --- 그리드 영역 --- */
@@ -85,6 +86,7 @@
             position: relative; 
             overflow: hidden;
             flex-shrink: 0;
+            border: 2px solid #000;
         }
         .album-cover { 
             width: 100%; 
@@ -107,73 +109,59 @@
             box-sizing: border-box; 
         }
         .song-title-text { 
-    font-family: var(--font-hand); 
-    font-weight: bold; 
-    
-    font-size: clamp(12px, 4vw, 16px); 
-    
-    white-space: nowrap; 
-    width: 100%;
-    display: inline-block;
-    overflow: hidden; 
-    text-overflow: ellipsis;
-    text-align: center;
-}
+            font-family: var(--font-hand); 
+            font-weight: bold; 
+            font-size: clamp(12px, 4vw, 16px); 
+            white-space: nowrap; 
+            width: 100%;
+            display: inline-block;
+            overflow: hidden; 
+            text-overflow: ellipsis;
+            text-align: center;
+        }
 
         /* --- 최애곡 박스 --- */
-        .favorite-bar { background: var(--nct-light); border-radius: 15px; padding: 12px; display: flex; align-items: center; gap: 15px; border: none; cursor: pointer; }
-        .fav-cover-container { width: 65px; height: 65px; border-radius: 8px; background-color: #fff; position: relative; overflow: hidden; flex-shrink: 0; }
+        .favorite-bar { background: var(--nct-light); border-radius: 15px; padding: 12px; display: flex; align-items: center; gap: 15px; border: 2px solid #000; cursor: pointer; }
+        .fav-cover-container { width: 65px; height: 65px; border-radius: 8px; background-color: #fff; position: relative; overflow: hidden; flex-shrink: 0; border: 2px solid #000; }
         .fav-cover { width: 100%; height: 100%; object-fit: cover; opacity: 0; }
         .fav-cover.uploaded { opacity: 1; }
         
         .fav-info { flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; }
-        .fav-title { font-size: 30px; font-family: var(--font-hand); line-height: 1.1; display: block; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .fav-title { font-size: 24px; font-family: var(--font-hand); line-height: 1.1; display: block; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: bold; }
         .progress-container { width: 100%; height: 5px; background: #bbb; border-radius: 2px; overflow: hidden; }
         .progress-fill { width: 70%; height: 100%; background: #000; }
         .my-favorite-text { font-size: 10px; font-weight: 900; text-align: right; margin-top: 5px; }
 
-        .submit-btn { background-color: var(--nct-neon); border: 3px solid #000; padding: 12px 40px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px #000; margin-top: 25px; border-radius: 10px; }
-        .submit-btn:active { box-shadow: 0px 0px 0px #000; transform: translate(2px, 2px); }
+        .submit-btn { background-color: var(--nct-neon); border: 3px solid #000; padding: 12px 40px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 4px 4px 0px #000; margin-top: 25px; border-radius: 10px; width: 100%; max-width: 450px; transition: 0.1s; }
+        .submit-btn:active { box-shadow: 0px 0px 0px #000; transform: translate(4px, 4px); }
 
-        /* --- 모달/결과창 관련 --- */
-        .search-modal, .result-screen { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; padding: 25px; border: 4px solid #000; width: 85%; max-width: 400px; z-index: 1000; box-shadow: 0 0 0 100vmax rgba(0,0,0,0.8); border-radius: 15px; }
+        /* --- 결과창 및 반대 취향 스타일 --- */
+        .search-modal, .result-screen { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; padding: 25px; border: 4px solid #000; width: 85%; max-width: 400px; z-index: 1000; box-shadow: 0 0 0 100vmax rgba(0,0,0,0.8); border-radius: 15px; text-align: center; }
+        
+        .rank-container { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+        .rank-item { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 12px; background: #f9f9f9; border: 2px solid #000; text-align: left; }
+        .rank-img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #000; object-fit: cover; flex-shrink: 0; }
+        .rank-info { flex-grow: 1; }
+        .rank-name { font-weight: 900; font-size: 15px; }
+        .rank-score { font-size: 12px; color: #666; font-weight: bold; }
+        .rank-number { font-weight: 900; font-size: 18px; color: var(--bg-yellow); -webkit-text-stroke: 1px #000; margin-right: 5px; }
+
+        .opposite-section { margin-top: 20px; padding-top: 15px; border-top: 2px dashed #ccc; text-align: left; }
+        .opposite-title { font-size: 16px; font-weight: 900; color: #ff4757; margin-bottom: 8px; }
+        .opposite-item { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 10px; background: #fff5f5; border: 2px solid #ff4757; }
+        .opposite-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #ff4757; object-fit: cover; flex-shrink: 0; }
+        .opposite-name { font-weight: 900; font-size: 14px; color: #ff4757; }
+
+        /* --- 공통 요소 --- */
         .search-row { display: flex; gap: 8px; margin-bottom: 12px; }
         .search-input { flex-grow: 1; padding: 10px; border: 2px solid #000; outline: none; border-radius: 8px; }
         .search-btn { padding: 10px 15px; background: var(--nct-neon); border: 2px solid #000; font-weight: bold; cursor: pointer; border-radius: 8px; }
         .search-results { max-height: 250px; overflow-y: auto; }
+        .result-item { display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; border-bottom: 1px solid #eee; text-align: left; }
         
-        /* [수정] 닫기 버튼: 너비 50% + 중앙 정렬 + 네온색 */
-        .close-modal-btn {
-            display: block;
-            margin: 15px auto 0;
-            width: 50%;           
-            background-color: var(--nct-neon);
-            border: 3px solid #000; 
-            padding: 12px 0;
-            font-size: 16px; 
-            font-weight: 900; 
-            cursor: pointer; 
-            border-radius: 8px;
-            box-shadow: 3px 3px 0px #000;
-            transition: 0.1s;
-        }
-        .close-modal-btn:active { box-shadow: 0px 0px 0px #000; transform: translate(3px, 3px); }
-
-        /* [추가] LP 애니메이션 */
-        @keyframes rotateLP { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .loading-lp { width: 60px; height: 60px; border-radius: 50%; border: 5px solid #000; background: radial-gradient(circle, #333 20%, #000 21%); margin: 20px auto; animation: rotateLP 2s linear infinite; position: relative; }
+        @keyframes rotateLP { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .loading-lp::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 10px; background: var(--nct-neon); border-radius: 50%; }
-
-        /* [추가] 결과창 멤버 프로필 디자인 */
-        .rank-container { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; text-align: left; }
-        .rank-item { display: flex; align-items: center; gap: 15px; padding: 10px 15px; border-radius: 12px; background: #f9f9f9; border: 2px solid #000; }
-        .rank-img { width: 55px; height: 55px; border-radius: 50%; border: 2px solid #000; object-fit: cover; background: #eee; flex-shrink: 0; }
-        .rank-info { flex-grow: 1; }
-        .rank-name { font-weight: 900; font-size: 16px; margin-bottom: 2px; }
-        .rank-score { font-size: 13px; color: #666; font-weight: bold; }
-        .rank-number { font-weight: 900; font-size: 18px; color: var(--bg-yellow); -webkit-text-stroke: 1px #000; margin-right: 5px; }
-
-        .result-item { display: flex; align-items: center; gap: 10px; padding: 10px; cursor: pointer; border-bottom: 1px solid #eee; }
     </style>
 </head>
 <body>
@@ -220,42 +208,48 @@
         <button class="search-btn" onclick="searchSong()">검색</button>
     </div>
     <div class="search-results" id="searchResults"></div>
-    <button class="close-modal-btn" onclick="closeSearch()">닫기</button>
+    <button class="submit-btn" style="box-shadow:none; margin-top:10px; font-size:14px; padding:10px;" onclick="closeSearch()">닫기</button>
 </div>
 
 <div class="result-screen" id="resultScreen">
-    <div style="text-align:center">
-        <h2>우리의 싱크로율</h2>
-        <div style="width: 80px; height: 80px; background:#000; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:10px auto; font-size:24px; font-weight:bold; border:3px solid var(--nct-neon)">
-            <span id="syncScore">0</span>%
-        </div>
-        <div id="rankList"></div>
-        <button class="submit-btn" style="width:100%" onclick="location.reload()">다시하기</button>
+    <h2 style="margin-top:0">우리의 싱크로율</h2>
+    <div style="width: 75px; height: 75px; background:#000; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:10px auto; font-size:22px; font-weight:bold; border:3px solid var(--nct-neon)">
+        <span id="syncScore">0</span>%
     </div>
+    
+    <div id="rankList" class="rank-container"></div>
+
+    <div class="opposite-section">
+        <div class="opposite-title">⚡ 극과 극 반대 취향</div>
+        <div id="oppositeMember"></div>
+    </div>
+
+    <button class="submit-btn" style="width:100%; font-size:16px; margin-top:20px;" onclick="savePlaylistImage()" id="shareBtn">💚 내 취향표 공유하기 (이미지)</button>
+    <button class="submit-btn" style="width:100%; background:#eee; box-shadow:none; font-size:14px; margin-top:10px; padding:10px;" onclick="location.reload()">다시하기</button>
 </div>
 
 <script>
     const memberData = [
-    { name: "태용", img: "https://via.placeholder.com/100", tracks: ["PADO", "Touch", "영웅", "Make a wish", "Black on Black", "From home", "Baby don't stop", "Baggy Jeans", "Universe"], favorite: "Misfit" },
-    { name: "쟈니", img: "https://via.placeholder.com/100", tracks: ["Ice tea", "surf", "broken melodies", "fact check", "parade", "from home", "baggy jeans", "gas", "cherry bomb"], favorite: "질주" },
-    { name: "유타", img: "https://via.placeholder.com/100", tracks: ["touch", "promise you", "소방차", "sunny road", "from home", "back 2u", "fact check", "2baddies", "boss"], favorite: "영웅" },
-    { name: "쿤", img: "https://via.placeholder.com/100", tracks: ["rainy day", "sweet dream", "love talk", "영웅", "the 7th sense", "no longer", "kick back", "phantom", "baggy jeans"], favorite: "first time" },
-    { name: "텐", img: "https://via.placeholder.com/100", tracks: ["steady", "beautiful", "resonance", "misfit", "baggy jeans", "from home", "baby don't stop", "work it", "make a wish"], favorite: "that's not fair" },
-    { name: "샤오쥔", img: "https://via.placeholder.com/100", tracks: ["beautiful", "all about you", "my everything", "the beat", "cherry bomb", "love after me", "baggy jeans", "turn back time", "resonance"], favorite: "cherry bomb" },
-    { name: "헨드리", img: "https://via.placeholder.com/100", tracks: ["pado", "baby don't stop", "from home", "90's love", "the 7th sense", "beautiful", "cherry bomb", "the beat", "call D"], favorite: "misfit" },
-    { name: "런쥔", img: "https://via.placeholder.com/100", tracks: ["비트박스", "사랑한단 뜻이야", "트리거더피버", "문라잇", "일곱번째 감각", "my everything", "캔디", "스무디", "Beat it up"], favorite: "맛" },
-    { name: "제노", img: "https://via.placeholder.com/100", tracks: ["Wish", "Touch", "Hello Future", "Fact Check", "Work It", "마지막 인사", "Baggy Jeans", "Far", "영웅"], favorite: "일곱번째 감각" },
-    { name: "해찬", img: "https://via.placeholder.com/100", tracks: ["Hello Future", "주인공", "Dream Comes True", "Misfit", "뿔", "Back 2U", "Baggy Jeans", "영웅", "일곱번째 감각"], favorite: "Kick It" },
-    { name: "재민", img: "https://via.placeholder.com/100", tracks: ["We Go Up", "주인공", "나의 모든 순간", "Dream Team", "Work It", "Dear Dream", "Chiller", "일곱번째 감각", "Make a Wish"], favorite: "Graduation" },
-    { name: "양양", img: "https://via.placeholder.com/100", tracks: ["Chewing Gum", "My Everything", "Eternal White", "90's Love", "That's not fair", "윤슬", "영웅", "The 7th sense", "Universe"], favorite: "New Axis" },
-    { name: "천러", img: "https://via.placeholder.com/100", tracks: ["Hello Future", "문", "Broken Melodies", "Trigger the Fever", "Cherry Bomb", "Graduation", "Beat it up", "Turn back time", "영웅"], favorite: "우리의 계절" },
-    { name: "지성", img: "https://via.placeholder.com/100", tracks: ["덩크슛", "Vroom", "우리의 계절", "Trigger the Fever", "Work It", "Dear Dream", "Make a Wish", "영웅", "Black on Black"], favorite: "I hate fruits" },
-    { name: "시온", img: "https://via.placeholder.com/100", tracks: ["Steady", "Touch", "텐데", "마지막 첫사랑", "소방차", "윤슬", "Kick It", "Black on Black", "Cherry Bomb"], favorite: "Baggy Jeans" },
-    { name: "리쿠", img: "https://via.placeholder.com/100", tracks: ["Hello Future", "1000", "Misfit", "Make You Shine", "The 7th Sense", "나쁜 짓", "Hellow Mellow", "영웅", "Baggy Jeans"], favorite: "Steady" },
-    { name: "유우시", img: "https://via.placeholder.com/100", tracks: ["We Go Up", "Once Again", "Favorite", "Work It", "영웅", "백야", "영웅", "Cherry Bomb", "Resonance"], favorite: "Wish" },
-    { name: "재희", img: "https://via.placeholder.com/100", tracks: ["Wish", "First Time", "Broken Melodies", "프린스핑송", "일곱번째 감각", "나의 모든 순간", "영웅", "Ay-Yo", "Baggy Jeans"], favorite: "Coming Home" },
-    { name: "료", img: "https://via.placeholder.com/100", tracks: ["Hello Future", "Sun&Moon", "Timeless", "0 Mile", "The 7th Sense", "Fly Away With Me", "Steady", "Mad City", "Baggy Jeans"], favorite: "나쁜 짓" },
-    { name: "사쿠야", img: "https://via.placeholder.com/100", tracks: ["Best Friend Ever", "I.O.U", "Kick Back", "Paradise", "New Axis", "피아노", "백열등", "Gimme Gimme", "PADO"], favorite: "Dancing In The Rain" }
+    { name: "태용", img: "https://via.placeholder.com/100/CBFF00/000000?text=TY", tracks: ["PADO", "Touch", "영웅", "Make a wish", "Black on Black", "From home", "Baby don't stop", "Baggy Jeans", "Universe"], favorite: "Misfit" },
+    { name: "쟈니", img: "https://via.placeholder.com/100/CBFF00/000000?text=JN", tracks: ["Ice tea", "surf", "broken melodies", "fact check", "parade", "from home", "baggy jeans", "gas", "cherry bomb"], favorite: "질주" },
+    { name: "유타", img: "https://via.placeholder.com/100/CBFF00/000000?text=YT", tracks: ["touch", "promise you", "소방차", "sunny road", "from home", "back 2u", "fact check", "2baddies", "boss"], favorite: "영웅" },
+    { name: "쿤", img: "https://via.placeholder.com/100/CBFF00/000000?text=KN", tracks: ["rainy day", "sweet dream", "love talk", "영웅", "the 7th sense", "no longer", "kick back", "phantom", "baggy jeans"], favorite: "first time" },
+    { name: "텐", img: "https://via.placeholder.com/100/CBFF00/000000?text=TEN", tracks: ["steady", "beautiful", "resonance", "misfit", "baggy jeans", "from home", "baby don't stop", "work it", "make a wish"], favorite: "that's not fair" },
+    { name: "샤오쥔", img: "https://via.placeholder.com/100/CBFF00/000000?text=XJ", tracks: ["beautiful", "all about you", "my everything", "the beat", "cherry bomb", "love after me", "baggy jeans", "turn back time", "resonance"], favorite: "cherry bomb" },
+    { name: "헨드리", img: "https://via.placeholder.com/100/CBFF00/000000?text=HD", tracks: ["pado", "baby don't stop", "from home", "90's love", "the 7th sense", "beautiful", "cherry bomb", "the beat", "call D"], favorite: "misfit" },
+    { name: "런쥔", img: "https://via.placeholder.com/100/CBFF00/000000?text=RJ", tracks: ["비트박스", "사랑한단 뜻이야", "트리거더피버", "문라잇", "일곱번째 감각", "my everything", "캔디", "스무디", "Beat it up"], favorite: "맛" },
+    { name: "제노", img: "https://via.placeholder.com/100/CBFF00/000000?text=JN", tracks: ["Wish", "Touch", "Hello Future", "Fact Check", "Work It", "마지막 인사", "Baggy Jeans", "Far", "영웅"], favorite: "일곱번째 감각" },
+    { name: "해찬", img: "https://via.placeholder.com/100/CBFF00/000000?text=HC", tracks: ["Hello Future", "주인공", "Dream Comes True", "Misfit", "뿔", "Back 2U", "Baggy Jeans", "영웅", "일곱번째 감각"], favorite: "Kick It" },
+    { name: "재민", img: "https://via.placeholder.com/100/CBFF00/000000?text=JM", tracks: ["We Go Up", "주인공", "나의 모든 순간", "Dream Team", "Work It", "Dear Dream", "Chiller", "일곱번째 감각", "Make a Wish"], favorite: "Graduation" },
+    { name: "양양", img: "https://via.placeholder.com/100/CBFF00/000000?text=YY", tracks: ["Chewing Gum", "My Everything", "Eternal White", "90's Love", "That's not fair", "윤슬", "영웅", "The 7th sense", "Universe"], favorite: "New Axis" },
+    { name: "천러", img: "https://via.placeholder.com/100/CBFF00/000000?text=CL", tracks: ["Hello Future", "문", "Broken Melodies", "Trigger the Fever", "Cherry Bomb", "Graduation", "Beat it up", "Turn back time", "영웅"], favorite: "우리의 계절" },
+    { name: "지성", img: "https://via.placeholder.com/100/CBFF00/000000?text=JS", tracks: ["덩크슛", "Vroom", "우리의 계절", "Trigger the Fever", "Work It", "Dear Dream", "Make a Wish", "영웅", "Black on Black"], favorite: "I hate fruits" },
+    { name: "시온", img: "https://via.placeholder.com/100/CBFF00/000000?text=SO", tracks: ["Steady", "Touch", "텐데", "마지막 첫사랑", "소방차", "윤슬", "Kick It", "Black on Black", "Cherry Bomb"], favorite: "Baggy Jeans" },
+    { name: "리쿠", img: "https://via.placeholder.com/100/CBFF00/000000?text=RK", tracks: ["Hello Future", "1000", "Misfit", "Make You Shine", "The 7th Sense", "나쁜 짓", "Hellow Mellow", "영웅", "Baggy Jeans"], favorite: "Steady" },
+    { name: "유우시", img: "https://via.placeholder.com/100/CBFF00/000000?text=YS", tracks: ["We Go Up", "Once Again", "Favorite", "Work It", "영웅", "백야", "영웅", "Cherry Bomb", "Resonance"], favorite: "Wish" },
+    { name: "재희", img: "https://via.placeholder.com/100/CBFF00/000000?text=JH", tracks: ["Wish", "First Time", "Broken Melodies", "프린스핑송", "일곱번째 감각", "나의 모든 순간", "영웅", "Ay-Yo", "Baggy Jeans"], favorite: "Coming Home" },
+    { name: "료", img: "https://via.placeholder.com/100/CBFF00/000000?text=RY", tracks: ["Hello Future", "Sun&Moon", "Timeless", "0 Mile", "The 7th Sense", "Fly Away With Me", "Steady", "Mad City", "Baggy Jeans"], favorite: "나쁜 짓" },
+    { name: "사쿠야", img: "https://via.placeholder.com/100/CBFF00/000000?text=SK", tracks: ["Best Friend Ever", "I.O.U", "Kick Back", "Paradise", "New Axis", "피아노", "백열등", "Gimme Gimme", "PADO"], favorite: "Dancing In The Rain" }
 ];
 
 const titleAlias = {
@@ -275,7 +269,7 @@ const titleAlias = {
         grid.innerHTML += `
             <div class="track-item" id="item-${index}" onclick="openSearch(${index})">
                 <div class="hashtag">${tag}</div>
-                <div class="album-cover-container"><img class="album-cover" src="#"></div>
+                <div class="album-cover-container"><img class="album-cover" src=""></div>
                 <div class="song-title-box"><span class="song-title-text"></span></div>
             </div>
         `;
@@ -285,7 +279,6 @@ const titleAlias = {
     function openSearch(idx) { currentItemIndex = idx; document.getElementById('searchModal').style.display = 'block'; }
     function closeSearch() { document.getElementById('searchModal').style.display = 'none'; }
 
-    // [수정] 검색 시 LP 애니메이션 복구
     async function searchSong() {
         const query = document.getElementById('searchInput').value;
         if(!query) return;
@@ -319,30 +312,54 @@ const titleAlias = {
         closeSearch();
     }
 
-    function normalize(t) { return t ? t.toLowerCase().replace(/\([^)]*\)|[\s\-_]/g, "") : ""; }
+    function normalize(t) { 
+        if(!t) return "";
+        const pure = t.replace(/\s/g, "");
+        const translated = titleAlias[pure] || t;
+        return translated.toLowerCase().replace(/\([^)]*\)|[\s\-_]/g, ""); 
+    }
     
-    // [수정] 결과창 멤버별 원형 프로필 반영
+    // 순위 로직 (1번 희소성 보너스 + 반대 취향 포함)
     function showRankResult() {
-        const userSongs = Array.from({length: 9}, (_, i) => document.getElementById(`item-${i}`).querySelector('.song-title-text').innerText);
-        const userFav = document.getElementById('favTitle').innerText;
+        const userSongs = Array.from({length: 9}, (_, i) => {
+            let title = document.getElementById(`item-${i}`).querySelector('.song-title-text').innerText;
+            return title || null;
+        }).filter(s => s !== null);
         
+        const userFav = document.getElementById('favTitle').innerText;
+
+        // 곡별 희소성 계산
+        const trackCounts = {};
+        memberData.forEach(m => {
+            m.tracks.forEach(t => {
+                const normT = normalize(t);
+                trackCounts[normT] = (trackCounts[normT] || 0) + 1;
+            });
+        });
+
         const results = memberData.map(m => {
             let score = 0;
             const mTracks = m.tracks.map(t => normalize(t));
-            userSongs.forEach((song, i) => {
-                if(!song) return;
-                const uNorm = normalize(song);
-                if(uNorm === mTracks[i]) score += 10;
-                else if(mTracks.includes(uNorm)) score += 5;
+            const mFav = normalize(m.favorite);
+
+            userSongs.forEach(uSong => {
+                const uNorm = normalize(uSong);
+                if(mTracks.includes(uNorm)) {
+                    const popularity = trackCounts[uNorm] || 1;
+                    const rarityBonus = Math.max(1, 10 - popularity); 
+                    score += (10 + rarityBonus);
+                }
             });
-            if(normalize(userFav) === normalize(m.favorite)) score += 15;
-            return { ...m, finalScore: Math.min(Math.round((score/105)*100), 100) };
+
+            if(userFav !== "선택안함" && normalize(userFav) === mFav) score += 30;
+
+            return { ...m, finalScore: Math.min(Math.round((score/150)*100), 100) };
         }).sort((a,b) => b.finalScore - a.finalScore);
 
+        // 결과창 렌더링
         document.getElementById('syncScore').innerText = results[0].finalScore;
 
         const rankList = document.getElementById('rankList');
-        rankList.className = "rank-container";
         rankList.innerHTML = results.slice(0,3).map((r, i) => `
             <div class="rank-item">
                 <div class="rank-number">${i+1}</div>
@@ -353,7 +370,40 @@ const titleAlias = {
                 </div>
             </div>
         `).join('');
+
+        // 반대 취향 (꼴찌)
+        const opposite = results[results.length - 1];
+        document.getElementById('oppositeMember').innerHTML = `
+            <div class="opposite-item">
+                <img src="${opposite.img}" class="opposite-img">
+                <div class="opposite-info">
+                    <div class="opposite-name">⚡ ${opposite.name}</div>
+                    <div class="rank-score" style="color:#ff4757">싱크로율 ${opposite.finalScore}% (우린 멀어...)</div>
+                </div>
+            </div>
+        `;
+
         document.getElementById('resultScreen').style.display = 'block';
+    }
+
+    // 이미지 저장 기능
+    function savePlaylistImage() {
+        const card = document.querySelector('.playlist-card');
+        const userName = document.getElementById('userName').innerText;
+        const btn = document.getElementById('shareBtn');
+        btn.innerText = "생성 중...";
+
+        html2canvas(card, {
+            useCORS: true,
+            backgroundColor: "#1a1a1a",
+            scale: 2
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `NCT_Playlist_${userName}.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+            btn.innerText = "💚 내 취향표 공유하기 (이미지)";
+        });
     }
 
     function loadProfile(e) {
